@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         我的同人｜工具箱
 // @namespace    mydoujin-toolbox
-// @version      1.1.3
+// @version      1.1.4
 // @description  戰報統計、戰報逐行播放、Boss 冷卻倒數、角色查詢整合成一個插件；左下角圖示按鈕可個別開關各功能（立即生效）
 // @match        https://mydoujin.online/*
 // @run-at       document-start
@@ -12,15 +12,15 @@
 (function () {
   'use strict';
   if (window.__mdToolbox) return;
-  const TK_VER = "1.1.3";
+  const TK_VER = "1.1.4";
   window.__mdToolbox = TK_VER;
   const ICON = "data:image/webp;base64,UklGRrYOAABXRUJQVlA4WAoAAAAQAAAATwAATwAAQUxQSK4EAAABoHbbtilJHtG+iMyybbRt27Zt27Ztu7+VbbZt2zYSce85+0O8F/EybkTEBKAjjS/hQQZmR04xFukarD4GQPeXGXMCL4ZPx5jmF9tnHzMMz1ch3CklizHfkPz85g8pWcr/1oRLx2GLKLHMaoXfLQObjsdujKRErebDgTAp7V5RdeSrXevAelPcPgUshu0o41F8Es4CA4+cUNye9WYcMPaaD8nidqsv64H1Hv2HDLEoh60pWsvC4owHln3wfzIKWdw6LazphWZTjPHAkCt/p0YlO2Ltf2sRftTHFuKAHmd/QkZlZgf8V4tqy54o1WS8QZdjPiCDMrcoi1V+r4XK37dACTDG5BgPuN2fJ6OwyqIMBn5IqYHCn7eABQDjvAUc0P3AJWQQVl3cgA9qY+Qf+7pSp169DADn0PPk10mNrLEw0+UVxpqojM+99NkPP869escRwMGfkEFYc2EWC4ugKnO/nDqVjJEFFgWHBQwFkCKqKiGSFGGhHTC5oHwJUVlXHvd0UAd2wF0N50zGhmKxjWpDMRjxP7WRAE2vUxqKxfTG4nFCizBJU5DDNm3UJATeFmFM308ZmaJqD8C4mozHPYxMUsIbN64EWFuDx8ExaBLCp8nWcZsCriqLDf9UZYoif6wYA9n+5IrwJs/aPm8xMsnIa0EyCn/ZFy7P4ywGJqn6Qz9DkhoYL4I3GcZ0+UgljcDb4CpIjbwUPsNhLwqTFPl3VTjJoAYeCZ81jiGNwIeNQw5VWreCA6wZ/aNKGgxrw0I0i5Hv9TIGHkczMkll22gYUHIYeRecMc1vUJJZBgavUXI0tm2KJuxDYTJjYbBVS9AsRk6AL81mSKZ9GRjgboYc1f9XMeu3iKZlBn7KkMXI23EnA5NpGQPrHNb4jjFL9O3RP6im07qcA+CwxV8MGcq/n4tMVvlvX/RdD/DY/GuGisSVP+35yDstABzGLqBIhiREKkkFAI+ut5OxInENkgELHPE7G2SGKZUwZEK7NArrAKywwWZvUBqDB5a5YtH3DGU2RGsw/Ma/SIqyMQJHfE7GKFohMb0BT5FBmS2kJvcOozC3zFdvZvqRuVrmuyPwESUhlaDtmiVlcuEwmL00aiISg7JSJYqS/PnGZliHu1hOQ0nq5+N3e+1/JSnl189bAXAwtvubDCkIP3joxE2HAX7U9vuecsQ2KzYBzhprLFb4hKH+Aqd1BgDnkO+9BwBrMXIeo9aZ8LuR8N5bAMY675yxDug2bPnOsBadblVqXan8ty2aUL0DRt/w2qc/Prsamhywzx+qdaX/XWBhq3IYcsUfrPx0BLquecITf7OuKmf2gcszJez2KRmiaJmv3vXK30ww8IUhsDkOB7WzrKxUkoyxbkRyWOZL/eEyHI5tlchcCVFZrxpIzWHg0i7GAHDYOqow0Z9+YcxhmU94bwBTeomRKSrfOGOlzf9jzGHgJfDwOJrCNPStdYEdvmPQLIpsC2OantGQBpXtl5WwzHNk0IzIdwY4rPaXaiIU4cQ+6Hf7r2QMSjLwSo8TGZisBi4dDqx8578ko6jKW8bMYEyHDHx7DQDLXDD3Z5LCxWj+mJISA3/Z2ZUArHrCuM/bXl4fVlA4IOIJAACQKQCdASpQAFAAPj0YiUMiIaEYWnaoIAPEtgBlc4ADJ+A8zauv4HerSjwq/z5vUfM7+zP7Ae9b+IHvC9AD+gf47rIvQA/ZL04PZD/dP0ls0Y/gH4Z+BX9o8FfE57Kzgsg9aT79/quLHeP/znuYPBZAJ+f/1P/Ucbv129Fn9C/0v5i83N4b7AH8f/qX/M9lv+n/5v3Te4/83/vX/K/w35CfYL/JP6D/sf8B/jP/H/nf/////uy9g/7c+x1+qrn/+Yi+j9IAEQTIxcYcpAnyj1/bej6ZMGi0BcQAI27t71VhY8t1VAUfI9o+EX5e0yPe5/D518e+FtktAhyvMkULZ3KAMqR9S9v19XZUXgNqeHFTxQY5NOsDnRlhQPRYS7jspDvSs81pihJ8cv1K+LPLtF+B7ff/yd59syTQcahYCiPsXjN4/kJNUfDy7HFh7V3aWJzOiIxDwAD+/2AeF2cdyJ+mulI1MrT1GnHmxcVdbkybFZrKimMS2ijG76cCKNypfCBa6pey6FPxqCC4By7Rxst/1AM8YV58C4uASo9XodRt4f4rwVKtGubpSlEe2MMy7YHfD/SfzaZ/bu98VZ68OAPzZPgsX8cDGEjw2saafQPgM+9X/e6aeBhAF5Aw/PoihnCnDw+w79vllaoe8vLXH3j54lGG3tvLdxeUBtkVjGED+dYXhuV++kf3Q6oX/wrEyT7AqDvUcZYQCNrCGp0wx87QP9QmhpdUXFkgnMYFJTNd7XqXv9YuBlyWOf/SWXb113/YwhdxZCLe/SD+Ow8n+bhoW9hWNcsq/9vgTYahTWSEAmM//NsUtTvMendPZpIm9E65K0iJWn7KkvsdRTQ+EWNVWmfVA6pk/TcXcQP1FSoXydiWI2G7/usv8/1fuvrVwJEb/8QHs0xhWM1INpbhxWYB7nfQ/M2xPBLawCziHT/ZAo1ptN+IUhF6ncXj9vqArvjIxW4bI4zwZgH7GvvjwHPBz7t7ccnyGRXdBb0Mwc1t9HkFQvUbtVU42DMtwZTAqgNIZhR2W8u1pUgHXV/az6rraiFBb5ua2e5TdgEecP8qerbvM/RophSUMQj2kNghRrNeDCCDu7hSXl9xWr8v7KYBMC2w+8xvGb5LwXIsJ1OlNX+MRF+aFBWydKmT6ORJHPIfRVNfgt9W0nwq5Bt2VpAOemZ+3nprwKdIpsPlVivBS/p0LdeZByaXe6xn9GY5pDj7DJUtYkT2hRHugOSXKdSF2kLOyw7I7rtJ/qxC02YUbXGBVJxlXv4o87Kf5jYDe3ydlGXbixvGGWN4FmoSAusGEoP3ZVd4BzpQKCyXwjFGSAA7AKdHu1w4HQ249tby48rtVoGm9beKGl/l1nQOtz7/0EVmLgqPwVtswbprYOYZEyo2vRHgrQIFFZe/Vua2fbBM8R7tJJIzd4jWlWZ4IjGupzy1o/Tb111zsCXz7l6Uhgl+w75A1aju0iO/ML6DuTzU2ivEcSzuGMSfwn5udlcqAVNF2km7mg9+4GmTPvJn9pZBL9m8UaIcP/Mp/IvsFJRYtZqvdbx7YdsQVb/a1JTMKiOAq/uV//EGUSwuUfzpT/SKv908Q2XMQxcccAENRR7FfJozJBmiy4qzbGp7X7P5gz+oyjqHxN6M2iWOVi86Q7l7teB0SwVybIda/bwmYAU6izbxYJs5yU3avT0S1iOFP+d7fNNnCmqhiqradR8rM3IKetAskgMgptCt3Kl6S2TGZ8RpDeMwOVmA7GFfiEls6+fuEfjLeIy4AXd/0BL+nEapfnFxvdqIhqJf/15xAMV992ZWn//y5dX5x35+Zro0IAVkOgW/8HP9E4H9cjrhuP74by+XOmSnwHokIM0vwvxpav+hDp0kQI2qSmeJWLlzCcGFDw1ANfzKrvL/ju1FAl04+ae41WdJ743Q9E32ns8idMVapcQe9ytJLdGb8naA8dHofv/l8CgI3pKZ5Xo52B5Vec/Z+3rcAxoBleINY5YRQqTFe6ygPpom5Ck171bLIMQaOUO7wzMEIgu/Gf5+YbXK+WQFdpOEU4dTkCgltRBK8O6ezxu6Cha1Ja7MPu2Oo6oo+83uLh/WBBBNq1C+2gdpKHpVFHEXoF3jaZxaNjX4aP2O2UpdvD7vD8JUBc3Nv8E9tcoJ2P6B4ciRT72fpjG03rwxedPk77d4AcT410TExwsUsZnPFrUQjCy+n/+l+w1z23mQXH3RugnP/uy21D59d1pdZN7a/VUhueiibHiLDrEpk+OleoiMfRz7BbKLirFe3UYek2LXS/ICI4xHinY6hBqKs4QiarQ2O8X8BUfjAaqOv0KIJvY230YyAUB793We1sSE2v9niSkMrXQPe8KlCpC899YlcAw54Um7YQJbo+1U55gbPLSBIU8xPLoVNeHvfLlVbyA3L0vrBivOLGIN+vfR5//sq0E5ybWZczaY4ecWKUFCwCGUHfF7/oY9jwclgD5y9TuS3Cl5GvwCLHez/uYfv3C4Lv5B/zhBJ+duo71Rry60yNMnvREQp8KrLumxEesmvsMt3m3k486ZDIp0y46JF1d/345Cumm+7AuExS51vNyD/byIpv3bpN/LTarhCKco9ZCZD+0lq+HcWRwZhIl559tJPT8qrH/yHHk/uGrWkzWH+YC3+EB3/+PuQ4KsqM6F/7r/N0G7ZMYLggOIOg/JU7beo+VymRYodgQvPYKg9Hh0keUKZqN27sX0sC7598Itf4yGNZRIy4Y+JqV63cO/u8R00osrtSWLgUpVHRgNW5sxpooZpzsdaf0reL17OMMWpHFjrYM6+vaBYqSOxkg2AhCHoAba2vy2setHFJ+gJVzx5g02gdyGeeJlQFoQiSKX6MkHBO7eQb59S/Fu2q5ZIkPE8iYqoHgXDxvEdA5wQ95kHOYlaEFzxIw9t17n5+D72dxkBJxv3hxBRf7mxs+polq9gcF8J3OFhFmEv0+WRVMfveoUVfNhYB9vXskkGIrhFvA27cPzdxhJbfphbaeLY19mFbVxGrdxXoVJ9g1XxLvSpJU0GZkFGIOvtPqCGjJ03WbvE4s5f4xZeUnBLCH+ImJzRElbfDQoUr4JgrNRiNZlgdqHwewaaK62rFuc2qs1ch7p0XtTWRbWoDQ0lgdCZJFW0VjgvVxzPoA++/TkWRZuHGTmXZUnm+WRUxBTK+u/ICskzOY2viS2Rig6sM4hw4eh1D4Ut+R84sJsXvMy60zc/w982gLjDmVARq/s7zPUXQ612R8nspXASXXq+s2uOvGNub/ekmz3tJBjY2LDZWa0OS2n9jclU5/cadtyFm82EJ+J3CGkPMBRX7ao7ksZZtuD3wTPouV24zdeFWTIJEZubnYwIRQQUeofXVhGdR2/6aYzbND2PLKbAAAA";
   const OFF_KEY = 'mdtk:off';
   const readOff = () => { try { const v = JSON.parse(localStorage.getItem(OFF_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } };
   const writeOff = v => { try { localStorage.setItem(OFF_KEY, JSON.stringify(v)); } catch (e) {  } };
   const MODS = [
-    Object.assign({"id": "stats", "icon": "📊", "name": "戰報統計", "desc": "戰報頁右下角的統計面板：傷害、承傷、回血、爆擊率、MVP。", "ver": "1.20.1", "at": "start"}, { run: function (TK) {
-// ===== 戰報統計 1.20.1（mydoujin_戰報統計.user.js）=====
+    Object.assign({"id": "stats", "icon": "📊", "name": "戰報統計", "desc": "戰報頁右下角的統計面板：傷害、承傷、回血、爆擊率、MVP。", "ver": "1.21.0", "at": "start"}, { run: function (TK) {
+// ===== 戰報統計 1.21.0（mydoujin_戰報統計.user.js）=====
 (function () {
   'use strict';
   const tk = (typeof TK === 'object' && TK) || { on: true, onToggle() {} };
@@ -39,6 +39,7 @@
     view: load('view', 'detail'),
     hidden: false,
     pos: load('pos', null),
+    size: load('size', null),
     open: {},
   };
   function load(k, d) { try { const v = localStorage.getItem('mdbs:' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
@@ -85,11 +86,14 @@
     }, force ? 0 : 1500);
   }
   function num(v) { const n = Number(v); return Number.isFinite(n) ? n : 0; }
+  const shortName = n => { const s2 = String(n || '').split(/[。！？!?]/).map(x => x.trim()).filter(Boolean); return s2.length ? s2[s2.length - 1] : String(n || ''); };
   function newUnit(p, side) {
+    const full = p.characterName || p.name || '?';
     return {
       id: p.userId || p.entityId || p._id || p.name,
       side,
-      name: p.characterName || p.name || '?',
+      name: shortName(full),
+      full,
       names: [p.characterName, p.name].filter(Boolean),
       sub: p.characterName ? p.name : (p.title || ''),
       isAssist: !!p.isAssist,
@@ -150,7 +154,7 @@
       const nm = (mn && mn[1]) || ((owner ? owner.name : '') + '的分身') || String(l.targetId);
       let u = byId.get(l.targetId);
       if (!u) { u = newUnit({ name: nm }, owner ? owner.side : 'C'); u.id = l.targetId; units.push(u); byId.set(l.targetId, u); }
-      u.name = nm; u.names = [nm];
+      u.name = shortName(nm); u.full = nm; u.names = [nm];
       if (owner) u.side = owner.side;
       u.isSummon = true;
       u.ownerId = l.actorId;
@@ -414,6 +418,10 @@
     border: 1px solid #34405a; border-radius: 14px;
     box-shadow: 0 18px 48px rgba(0,0,0,.6), 0 0 0 1px rgba(79,209,197,.06) inset; font: 14px/1.5 "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif; overflow: hidden; }
   .panel.simple { width: 640px; }
+  .rz { position: absolute; right: 0; bottom: 0; width: 18px; height: 18px; cursor: nwse-resize; z-index: 3; touch-action: none;
+    background: linear-gradient(135deg, transparent 0 45%, #4FD1C5 45% 52%, transparent 52% 64%, #4FD1C5 64% 71%, transparent 71%); opacity: .55; }
+  .rz:hover { opacity: 1; }
+  .panel.sized { max-width: calc(100vw - 8px); }
   .hd { display: flex; align-items: center; gap: 10px; padding: 10px 12px 10px 14px; background: linear-gradient(180deg,#222b3d,#1a2131);
     border-bottom: 1px solid #2d3748; cursor: move; user-select: none; position: relative; }
   .hd::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg,#4FD1C5,#2c7a7b); }
@@ -467,6 +475,8 @@
   .side.sB .side-hd .dot { background: #f56565; box-shadow: 0 0 6px rgba(245,101,101,.6); }
   .side.sC .side-hd .dot { background: #a0aec0; box-shadow: none; }
   table.simple td.nm { min-width: 0; }
+  td.nm { white-space: normal; overflow-wrap: anywhere; min-width: 150px; max-width: 280px; }
+  td.nm .tag { white-space: nowrap; }
   table.simple .bar { height: 6px; }
   .sm-line { display: flex; gap: 12px; margin-top: 6px; font-size: 12.5px; color: #8b98ad; }
   .sm-line b { font-variant-numeric: tabular-nums; margin-left: 3px; }
@@ -583,6 +593,7 @@
     document.body.appendChild(host);
     root.addEventListener('click', onClick);
     root.addEventListener('pointerdown', onDragStart);
+    root.addEventListener('dblclick', e => { if (e.target.closest('[data-rz]')) { state.size = null; save('size', null); render(); } });
   }
   function unmount() { if (host) { host.remove(); host = null; root = null; } }
   function sideLabel(rep, side) {
@@ -663,7 +674,7 @@
     const { tags, subline } = unitHead(u);
     const bst = u.isBoss && u.stats ? `<tr class="bst" data-key="${esc(key)}"><td colspan="8">${esc(statLine(u.stats))}</td></tr>` : '';
     let html = `<tr class="u${bst ? ' hasbst' : ''}${state.open[key] ? ' open' : ''}" data-key="${esc(key)}">
-      <td class="nm"><span class="arw">${state.open[key] ? '▾' : '▸'}</span>${rkBadge(i)}${esc(u.name)}${tags}<small>${esc(subline)}</small></td>
+      <td class="nm"><span class="arw">${state.open[key] ? '▾' : '▸'}</span>${rkBadge(i)}${nmTxt(u)}${tags}<small>${esc(subline)}</small></td>
       ${cell(dmg, 'c-dmg')}${cell(u.luck, 'c-luck')}
       <td class="c-tot${tot ? '' : ' zero'}">${fmt(tot)} <span class="pct">${pct.toFixed(1)}%</span><div class="bar"><i style="width:${Math.min(100, pct).toFixed(1)}%"></i></div></td>
       ${cell(take, 'c-take')}${cell(u.heal, 'c-heal')}${cell(u.sp, 'c-sp')}${critCell(u.crit, u.hitN)}
@@ -679,7 +690,7 @@
     const st = (label, v, cls) => `<div class="cs ${cls}${v ? '' : ' zero'}"><span>${label}</span><b>${fmt(v)}</b></div>`;
     return `<div class="card${open ? ' open' : ''}" data-key="${esc(key)}">
       <div class="c-top">
-        <div class="c-nm">${rkBadge(i)}<b>${esc(u.name)}</b>${tags}${subline ? `<small>${esc(subline)}</small>` : ''}</div>
+        <div class="c-nm">${rkBadge(i)}<b>${nmTxt(u)}</b>${tags}${subline ? `<small>${esc(subline)}</small>` : ''}</div>
         <div class="c-big${tot ? '' : ' zero'}"><b>${fmt(tot)}</b><span>${pct.toFixed(1)}%</span></div>
       </div>
       <div class="bar"><i style="width:${Math.min(100, pct).toFixed(1)}%"></i></div>
@@ -733,6 +744,7 @@
     return `<div class="spl"><span class="k">特殊迴避內容（灰色字但不是一般閃避）</span>` +
       ent.map(([k, n]) => `<div>・${esc(k.split('〈T〉').join(u.name))}<b>×${n}</b></div>`).join('') + `</div>`;
   }
+  const nmTxt = u => u.full && u.full !== u.name ? `<span title="${esc(u.full)}">${esc(u.name)}</span>` : esc(u.name);
   const simpleTags = u => (u.dead ? '<span class="tag dead">倒下</span>' : '') + (u.isAssist ? '<span class="tag ast">支援</span>' : '') + (u.isSummon ? '<span class="tag sum">分身</span>' : '');
   function sideSimple(rep, units, side, mode, mob) {
     const list = units.filter(u => u.side === side);
@@ -744,7 +756,7 @@
     if (mob) {
       return `<div class="side s${side}">${head}${list.map((u, i) => {
         const tot = u.dealt[mode] + u.luck, p = pctOf(u);
-        return `<div class="card simple"><div class="c-top"><div class="c-nm">${rkBadge(i)}<b>${esc(u.name)}</b>${simpleTags(u)}</div>
+        return `<div class="card simple"><div class="c-top"><div class="c-nm">${rkBadge(i)}<b>${nmTxt(u)}</b>${simpleTags(u)}</div>
           <div class="c-big${tot ? '' : ' zero'}"><b>${fmt(tot)}</b><span>${p.toFixed(1)}%</span></div></div>
           <div class="bar"><i style="width:${Math.min(100, p).toFixed(1)}%"></i></div>
           <div class="sm-line"><span>承受<b class="c-take">${fmt(u.taken[mode])}</b></span>${u.heal ? `<span>回血<b class="c-heal">${fmt(u.heal)}</b></span>` : ''}<span>爆擊<b class="c-crit">${critPct(u.crit, u.hitN)}</b> <i style="font-style:normal;font-size:11px">${u.crit}/${u.hitN}</i></span></div></div>`;
@@ -754,7 +766,7 @@
       <table class="simple"><thead><tr><th>角色</th><th>總計傷害</th><th>承受傷害</th><th>回復血量</th><th>爆擊率</th></tr></thead><tbody>
       ${list.map((u, i) => {
         const tot = u.dealt[mode] + u.luck, p = pctOf(u);
-        return `<tr class="u0"><td class="nm">${rkBadge(i)}${esc(u.name)}${simpleTags(u)}</td>
+        return `<tr class="u0"><td class="nm">${rkBadge(i)}${nmTxt(u)}${simpleTags(u)}</td>
           <td class="c-tot${tot ? '' : ' zero'}" style="min-width:190px">${fmt(tot)} <span class="pct">${p.toFixed(1)}%</span><div class="bar"><i style="width:${Math.min(100, p).toFixed(1)}%"></i></div></td>
           ${cell(u.taken[mode], 'c-take')}${cell(u.heal, 'c-heal')}${critCell(u.crit, u.hitN)}</tr>`;
       }).join('')}
@@ -876,8 +888,10 @@
       body = `<div class="msg">${esc(statusText || '等待戰報資料…')}</div>`;
     }
     const col = state.collapsed;
+    const sz = !mob && state.size ? state.size : null;
+    const szStyle = sz ? `width:${sz.w}px;` + (col ? '' : `height:${sz.h}px;`) : '';
     root.innerHTML = `<style>${CSS}</style>
-      <div class="panel${mob ? ' mob' : ''}${col ? ' col' : ''}${simple && !mob ? ' simple' : ''}" style="${posStyle}">
+      <div class="panel${mob ? ' mob' : ''}${col ? ' col' : ''}${simple && !mob ? ' simple' : ''}${sz ? ' sized' : ''}" style="${posStyle}${szStyle}">
         <div class="hd"${mob ? ' data-act="collapse"' : ' data-drag="1"'}>
           ${mob ? '<span class="grab"></span>' : ''}
           <div class="ttlw"><span class="ttl">📊 戰報統計</span>${col ? (playing ? `<span class="chips"><span class="chip play">⏳ 播放中</span></span>` : '') : `<span class="chips">${sub}</span>`}</div>
@@ -888,6 +902,7 @@
           </div>
         </div>
         ${col ? '' : `<div class="bd">${body}</div>`}
+        ${col || mob ? '' : '<div class="rz" data-rz="1" title="拖曳調整大小（雙擊恢復預設大小）"></div>'}
       </div>`;
     applyFit();
   }
@@ -899,6 +914,11 @@
     const mob = narrow();
     const top = p.getBoundingClientRect().top;
     const avail = Math.max(200, window.innerHeight - top - 12);
+    if (!mob && state.size && !state.collapsed) {
+      p.style.height = Math.min(state.size.h, avail) + 'px';
+      if (lab) lab.textContent = '手動';
+      return;
+    }
     if (mob || state.collapsed || !state.fit || !cache.get(currentId) || document.documentElement.hasAttribute('data-mdp-playing')) {
       if (!mob) p.style.maxHeight = avail + 'px';
       if (lab) lab.textContent = state.fit ? '100%' : '關';
@@ -920,7 +940,7 @@
     if (btn) {
       const act = btn.dataset.act;
       if (act === 'side') { state.sideView = btn.dataset.s || 'all'; render(); }
-      else if (act === 'fit') { state.fit = !state.fit; save('fit', state.fit); render(); }
+      else if (act === 'fit') { if (state.size) { state.size = null; save('size', null); state.fit = true; } else state.fit = !state.fit; save('fit', state.fit); render(); }
       else if (act === 'view') { state.view = btn.dataset.v === 'simple' ? 'simple' : 'detail'; save('view', state.view); render(); }
       else if (act === 'collapse') { if (e.target.closest('button') && e.target.closest('button') !== btn) return; state.collapsed = !state.collapsed; save('collapsed', state.collapsed); render(); }
       else if (act === 'hide') { state.hidden = true; render(); }
@@ -931,6 +951,7 @@
     if (row) { const k = row.dataset.key; state.open[k] = !state.open[k]; render(); }
   }
   function onDragStart(e) {
+    if (e.target.closest('[data-rz]')) { onResizeStart(e); return; }
     const hd = e.target.closest('[data-drag]');
     if (!hd || e.target.closest('button')) return;
     const panel = hd.parentElement;
@@ -944,6 +965,29 @@
       state.pos = { left: Math.round(left), top: Math.round(top) };
     };
     const up = () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); if (state.pos) save('pos', state.pos); applyFit(); };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    e.preventDefault();
+  }
+  function onResizeStart(e) {
+    const panel = e.target.closest('.panel');
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    panel.style.transform = ''; panel.style.maxHeight = 'none';
+    panel.style.left = r.left + 'px'; panel.style.top = r.top + 'px'; panel.style.right = 'auto';
+    state.pos = { left: Math.round(r.left), top: Math.round(r.top) };
+    const sx = e.clientX, sy = e.clientY, w0 = r.width, h0 = r.height;
+    const move = ev => {
+      const w = Math.max(360, Math.min(window.innerWidth - r.left - 4, w0 + ev.clientX - sx));
+      const h = Math.max(160, Math.min(window.innerHeight - r.top - 4, h0 + ev.clientY - sy));
+      panel.style.width = w + 'px'; panel.style.height = h + 'px';
+      state.size = { w: Math.round(w), h: Math.round(h) };
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up);
+      save('pos', state.pos);
+      if (state.size) { save('size', state.size); render(); }
+    };
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', up);
     e.preventDefault();

@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         我的同人｜工具箱
 // @namespace    mydoujin-toolbox
-// @version      1.0.1
-// @description  戰報統計、戰報逐行播放、Boss 冷卻倒數、角色查詢整合成一個插件；左下角圖示按鈕可查看所有功能並個別開關
+// @version      1.1.0
+// @description  戰報統計、戰報逐行播放、Boss 冷卻倒數、角色查詢整合成一個插件；左下角圖示按鈕可查看所有功能並個別開關（立即生效）
 // @match        https://mydoujin.online/*
 // @run-at       document-start
 // @grant        none
@@ -11,45 +11,38 @@
 
 (function () {
   'use strict';
-
-  // 同一頁只跑一次（例如工具箱被裝了兩份）
   if (window.__mdToolbox) return;
-  const TK_VER = "1.0.1";
+  const TK_VER = "1.1.0";
   window.__mdToolbox = TK_VER;
-  const ICON = "data:image/webp;base64,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";   // 工具箱按鈕圖案（建置時由 icon.webp 轉成 data URI）
-
+  const ICON = "data:image/webp;base64,UklGRrYOAABXRUJQVlA4WAoAAAAQAAAATwAATwAAQUxQSK4EAAABoHbbtilJHtG+iMyybbRt27Zt27Ztu7+VbbZt2zYSce85+0O8F/EybkTEBKAjjS/hQQZmR04xFukarD4GQPeXGXMCL4ZPx5jmF9tnHzMMz1ch3CklizHfkPz85g8pWcr/1oRLx2GLKLHMaoXfLQObjsdujKRErebDgTAp7V5RdeSrXevAelPcPgUshu0o41F8Es4CA4+cUNye9WYcMPaaD8nidqsv64H1Hv2HDLEoh60pWsvC4owHln3wfzIKWdw6LazphWZTjPHAkCt/p0YlO2Ltf2sRftTHFuKAHmd/QkZlZgf8V4tqy54o1WS8QZdjPiCDMrcoi1V+r4XK37dACTDG5BgPuN2fJ6OwyqIMBn5IqYHCn7eABQDjvAUc0P3AJWQQVl3cgA9qY+Qf+7pSp169DADn0PPk10mNrLEw0+UVxpqojM+99NkPP869escRwMGfkEFYc2EWC4ugKnO/nDqVjJEFFgWHBQwFkCKqKiGSFGGhHTC5oHwJUVlXHvd0UAd2wF0N50zGhmKxjWpDMRjxP7WRAE2vUxqKxfTG4nFCizBJU5DDNm3UJATeFmFM308ZmaJqD8C4mozHPYxMUsIbN64EWFuDx8ExaBLCp8nWcZsCriqLDf9UZYoif6wYA9n+5IrwJs/aPm8xMsnIa0EyCn/ZFy7P4ywGJqn6Qz9DkhoYL4I3GcZ0+UgljcDb4CpIjbwUPsNhLwqTFPl3VTjJoAYeCZ81jiGNwIeNQw5VWreCA6wZ/aNKGgxrw0I0i5Hv9TIGHkczMkll22gYUHIYeRecMc1vUJJZBgavUXI0tm2KJuxDYTJjYbBVS9AsRk6AL81mSKZ9GRjgboYc1f9XMeu3iKZlBn7KkMXI23EnA5NpGQPrHNb4jjFL9O3RP6im07qcA+CwxV8MGcq/n4tMVvlvX/RdD/DY/GuGisSVP+35yDstABzGLqBIhiREKkkFAI+ut5OxInENkgELHPE7G2SGKZUwZEK7NArrAKywwWZvUBqDB5a5YtH3DGU2RGsw/Ma/SIqyMQJHfE7GKFohMb0BT5FBmS2kJvcOozC3zFdvZvqRuVrmuyPwESUhlaDtmiVlcuEwmL00aiISg7JSJYqS/PnGZliHu1hOQ0nq5+N3e+1/JSnl189bAXAwtvubDCkIP3joxE2HAX7U9vuecsQ2KzYBzhprLFb4hKH+Aqd1BgDnkO+9BwBrMXIeo9aZ8LuR8N5bAMY675yxDug2bPnOsBadblVqXan8ty2aUL0DRt/w2qc/Prsamhywzx+qdaX/XWBhq3IYcsUfrPx0BLquecITf7OuKmf2gcszJez2KRmiaJmv3vXK30ww8IUhsDkOB7WzrKxUkoyxbkRyWOZL/eEyHI5tlchcCVFZrxpIzWHg0i7GAHDYOqow0Z9+YcxhmU94bwBTeomRKSrfOGOlzf9jzGHgJfDwOJrCNPStdYEdvmPQLIpsC2OantGQBpXtl5WwzHNk0IzIdwY4rPaXaiIU4cQ+6Hf7r2QMSjLwSo8TGZisBi4dDqx8578ko6jKW8bMYEyHDHx7DQDLXDD3Z5LCxWj+mJISA3/Z2ZUArHrCuM/bXl4fVlA4IOIJAACQKQCdASpQAFAAPj0YiUMiIaEYWnaoIAPEtgBlc4ADJ+A8zauv4HerSjwq/z5vUfM7+zP7Ae9b+IHvC9AD+gf47rIvQA/ZL04PZD/dP0ls0Y/gH4Z+BX9o8FfE57Kzgsg9aT79/quLHeP/znuYPBZAJ+f/1P/Ucbv129Fn9C/0v5i83N4b7AH8f/qX/M9lv+n/5v3Te4/83/vX/K/w35CfYL/JP6D/sf8B/jP/H/nf/////uy9g/7c+x1+qrn/+Yi+j9IAEQTIxcYcpAnyj1/bej6ZMGi0BcQAI27t71VhY8t1VAUfI9o+EX5e0yPe5/D518e+FtktAhyvMkULZ3KAMqR9S9v19XZUXgNqeHFTxQY5NOsDnRlhQPRYS7jspDvSs81pihJ8cv1K+LPLtF+B7ff/yd59syTQcahYCiPsXjN4/kJNUfDy7HFh7V3aWJzOiIxDwAD+/2AeF2cdyJ+mulI1MrT1GnHmxcVdbkybFZrKimMS2ijG76cCKNypfCBa6pey6FPxqCC4By7Rxst/1AM8YV58C4uASo9XodRt4f4rwVKtGubpSlEe2MMy7YHfD/SfzaZ/bu98VZ68OAPzZPgsX8cDGEjw2saafQPgM+9X/e6aeBhAF5Aw/PoihnCnDw+w79vllaoe8vLXH3j54lGG3tvLdxeUBtkVjGED+dYXhuV++kf3Q6oX/wrEyT7AqDvUcZYQCNrCGp0wx87QP9QmhpdUXFkgnMYFJTNd7XqXv9YuBlyWOf/SWXb113/YwhdxZCLe/SD+Ow8n+bhoW9hWNcsq/9vgTYahTWSEAmM//NsUtTvMendPZpIm9E65K0iJWn7KkvsdRTQ+EWNVWmfVA6pk/TcXcQP1FSoXydiWI2G7/usv8/1fuvrVwJEb/8QHs0xhWM1INpbhxWYB7nfQ/M2xPBLawCziHT/ZAo1ptN+IUhF6ncXj9vqArvjIxW4bI4zwZgH7GvvjwHPBz7t7ccnyGRXdBb0Mwc1t9HkFQvUbtVU42DMtwZTAqgNIZhR2W8u1pUgHXV/az6rraiFBb5ua2e5TdgEecP8qerbvM/RophSUMQj2kNghRrNeDCCDu7hSXl9xWr8v7KYBMC2w+8xvGb5LwXIsJ1OlNX+MRF+aFBWydKmT6ORJHPIfRVNfgt9W0nwq5Bt2VpAOemZ+3nprwKdIpsPlVivBS/p0LdeZByaXe6xn9GY5pDj7DJUtYkT2hRHugOSXKdSF2kLOyw7I7rtJ/qxC02YUbXGBVJxlXv4o87Kf5jYDe3ydlGXbixvGGWN4FmoSAusGEoP3ZVd4BzpQKCyXwjFGSAA7AKdHu1w4HQ249tby48rtVoGm9beKGl/l1nQOtz7/0EVmLgqPwVtswbprYOYZEyo2vRHgrQIFFZe/Vua2fbBM8R7tJJIzd4jWlWZ4IjGupzy1o/Tb111zsCXz7l6Uhgl+w75A1aju0iO/ML6DuTzU2ivEcSzuGMSfwn5udlcqAVNF2km7mg9+4GmTPvJn9pZBL9m8UaIcP/Mp/IvsFJRYtZqvdbx7YdsQVb/a1JTMKiOAq/uV//EGUSwuUfzpT/SKv908Q2XMQxcccAENRR7FfJozJBmiy4qzbGp7X7P5gz+oyjqHxN6M2iWOVi86Q7l7teB0SwVybIda/bwmYAU6izbxYJs5yU3avT0S1iOFP+d7fNNnCmqhiqradR8rM3IKetAskgMgptCt3Kl6S2TGZ8RpDeMwOVmA7GFfiEls6+fuEfjLeIy4AXd/0BL+nEapfnFxvdqIhqJf/15xAMV992ZWn//y5dX5x35+Zro0IAVkOgW/8HP9E4H9cjrhuP74by+XOmSnwHokIM0vwvxpav+hDp0kQI2qSmeJWLlzCcGFDw1ANfzKrvL/ju1FAl04+ae41WdJ743Q9E32ns8idMVapcQe9ytJLdGb8naA8dHofv/l8CgI3pKZ5Xo52B5Vec/Z+3rcAxoBleINY5YRQqTFe6ygPpom5Ck171bLIMQaOUO7wzMEIgu/Gf5+YbXK+WQFdpOEU4dTkCgltRBK8O6ezxu6Cha1Ja7MPu2Oo6oo+83uLh/WBBBNq1C+2gdpKHpVFHEXoF3jaZxaNjX4aP2O2UpdvD7vD8JUBc3Nv8E9tcoJ2P6B4ciRT72fpjG03rwxedPk77d4AcT410TExwsUsZnPFrUQjCy+n/+l+w1z23mQXH3RugnP/uy21D59d1pdZN7a/VUhueiibHiLDrEpk+OleoiMfRz7BbKLirFe3UYek2LXS/ICI4xHinY6hBqKs4QiarQ2O8X8BUfjAaqOv0KIJvY230YyAUB793We1sSE2v9niSkMrXQPe8KlCpC899YlcAw54Um7YQJbo+1U55gbPLSBIU8xPLoVNeHvfLlVbyA3L0vrBivOLGIN+vfR5//sq0E5ybWZczaY4ecWKUFCwCGUHfF7/oY9jwclgD5y9TuS3Cl5GvwCLHez/uYfv3C4Lv5B/zhBJ+duo71Rry60yNMnvREQp8KrLumxEesmvsMt3m3k486ZDIp0y46JF1d/345Cumm+7AuExS51vNyD/byIpv3bpN/LTarhCKco9ZCZD+0lq+HcWRwZhIl559tJPT8qrH/yHHk/uGrWkzWH+YC3+EB3/+PuQ4KsqM6F/7r/N0G7ZMYLggOIOg/JU7beo+VymRYodgQvPYKg9Hh0keUKZqN27sX0sC7598Itf4yGNZRIy4Y+JqV63cO/u8R00osrtSWLgUpVHRgNW5sxpooZpzsdaf0reL17OMMWpHFjrYM6+vaBYqSOxkg2AhCHoAba2vy2setHFJ+gJVzx5g02gdyGeeJlQFoQiSKX6MkHBO7eQb59S/Fu2q5ZIkPE8iYqoHgXDxvEdA5wQ95kHOYlaEFzxIw9t17n5+D72dxkBJxv3hxBRf7mxs+polq9gcF8J3OFhFmEv0+WRVMfveoUVfNhYB9vXskkGIrhFvA27cPzdxhJbfphbaeLY19mFbVxGrdxXoVJ9g1XxLvSpJU0GZkFGIOvtPqCGjJ03WbvE4s5f4xZeUnBLCH+ImJzRElbfDQoUr4JgrNRiNZlgdqHwewaaK62rFuc2qs1ch7p0XtTWRbWoDQ0lgdCZJFW0VjgvVxzPoA++/TkWRZuHGTmXZUnm+WRUxBTK+u/ICskzOY2viS2Rig6sM4hw4eh1D4Ut+R84sJsXvMy60zc/w982gLjDmVARq/s7zPUXQ612R8nspXASXXq+s2uOvGNub/ekmz3tJBjY2LDZWa0OS2n9jclU5/cadtyFm82EJ+J3CGkPMBRX7ao7ksZZtuD3wTPouV24zdeFWTIJEZubnYwIRQQUeofXVhGdR2/6aYzbND2PLKbAAAA";
   const OFF_KEY = 'mdtk:off';
   const readOff = () => { try { const v = JSON.parse(localStorage.getItem(OFF_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } };
-  const writeOff = v => { try { localStorage.setItem(OFF_KEY, JSON.stringify(v)); } catch (e) { /* 無痕模式等 */ } };
-
+  const writeOff = v => { try { localStorage.setItem(OFF_KEY, JSON.stringify(v)); } catch (e) {  } };
   const MODS = [
-    Object.assign({"id": "stats", "icon": "📊", "name": "戰報統計", "desc": "戰報頁右下角的統計面板：傷害、承傷、回血、爆擊率、MVP。", "feats": ["玩家與 BOSS 的造成／幸運／總計傷害、承受傷害、回血、回 SP、爆擊率", "頂部摘要：我方總傷害、MVP、最佳坦克、最佳奶媽", "MVP 權重：輸出×1 > 補隊友×0.5 > 承傷×0.25 = 回SP×0.25 > 自回×0.1", "簡易／詳細切換；顯示全部／玩家／BOSS；⤢ 自動縮放成一個視窗", "燒掉的生命上限、特殊迴避、中毒／出血／凍傷等異常狀態與反傷", "西米專屬：番茄湯、臭臭茶、回收桶紀錄", "手機直拿自動改成底部抽屜＋角色卡片"], "ver": "1.20.0", "at": "start"}, { run: function () {
-// ===== 戰報統計 1.20.0（mydoujin_戰報統計.user.js）=====
+    Object.assign({"id": "stats", "icon": "📊", "name": "戰報統計", "desc": "戰報頁右下角的統計面板：傷害、承傷、回血、爆擊率、MVP。", "feats": ["玩家與 BOSS 的造成／幸運／總計傷害、承受傷害、回血、回 SP、爆擊率", "頂部摘要：我方總傷害、MVP、最佳坦克、最佳奶媽", "MVP 權重：輸出×1 > 補隊友×0.5 > 承傷×0.25 = 回SP×0.25 > 自回×0.1", "簡易／詳細切換；顯示全部／玩家／BOSS；⤢ 自動縮放成一個視窗", "燒掉的生命上限、特殊迴避、中毒／出血／凍傷等異常狀態與反傷", "西米專屬：番茄湯、臭臭茶、回收桶紀錄", "手機直拿自動改成底部抽屜＋角色卡片"], "ver": "1.20.1", "at": "start"}, { run: function (TK) {
+// ===== 戰報統計 1.20.1（mydoujin_戰報統計.user.js）=====
 (function () {
   'use strict';
-
+  const tk = (typeof TK === 'object' && TK) || { on: true, onToggle() {} };
   const API = 'https://mydoujin-backend.onrender.com';
-  const cache = new Map();   // reportId -> 戰報 JSON
+  const cache = new Map();
   const errors = {};
   const pending = new Set();
   let currentId = null;
   let host = null, root = null;
   let statusText = '';
   const state = {
-    mode: 'shown',                     // 固定用戰報文字上的數字（已移除「實際扣血」切換）
+    mode: 'shown',
     collapsed: load('collapsed', false),
-    fit: load('fit', true),            // 自動縮放：整個面板縮到一個視窗看得完
-    sideView: 'all',                   // 顯示哪一邊：all／A（玩家）／B（BOSS／對手）／C（其他）
-    view: load('view', 'detail'),       // simple = 簡易（總計／承受／回血），detail = 詳細（全部欄位＋點開細項）
+    fit: load('fit', true),
+    sideView: 'all',
+    view: load('view', 'detail'),
     hidden: false,
     pos: load('pos', null),
     open: {},
   };
-
   function load(k, d) { try { const v = localStorage.getItem('mdbs:' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
   function save(k, v) { try { localStorage.setItem('mdbs:' + k, JSON.stringify(v)); } catch (e) {} }
-
-  /* ---------- 攔截網站自己抓戰報的請求，不額外打 API ---------- */
   const origFetch = window.fetch;
   if (origFetch && !origFetch.__mdbs) {
     const wrapped = function (input) {
@@ -71,7 +64,6 @@
     wrapped.__mdbs = true;
     window.fetch = wrapped;
   }
-
   function ensureData(id, force) {
     if (!force && cache.has(id)) return;
     setTimeout(async () => {
@@ -92,10 +84,7 @@
       }
     }, force ? 0 : 1500);
   }
-
-  /* ---------- 統計 ---------- */
   function num(v) { const n = Number(v); return Number.isFinite(n) ? n : 0; }
-
   function newUnit(p, side) {
     return {
       id: p.userId || p.entityId || p._id || p.name,
@@ -113,23 +102,19 @@
       dealt: { real: 0, shown: 0 },
       taken: { real: 0, shown: 0 },
       byKind: { normal: { real: 0, shown: 0, n: 0 }, skill: { real: 0, shown: 0, n: 0 }, counter: { real: 0, shown: 0, n: 0 }, dot: { real: 0, shown: 0, n: 0 }, passive: { real: 0, shown: 0, n: 0 }, fart: { real: 0, shown: 0, n: 0 } },
-      simmer: null,   // 西米（死靈廚師）專屬：番茄湯、臭臭茶放屁、回收桶
+      simmer: null,
       luck: 0, luckN: 0, luckTaken: 0, luckTakenN: 0,
-      heal: 0, healTeam: 0, healSolo: 0, selfHeal: {}, healRecv: 0, sp: 0, spRecv: 0,   // healTeam＝治療技能（補隊友、或能補隊友的技能補到自己）、healSolo＝只能補自己（吸血、自補）
+      heal: 0, healTeam: 0, healSolo: 0, selfHeal: {}, healRecv: 0, sp: 0, spRecv: 0,
       crit: 0, hitN: 0, blockedN: 0, maxHit: 0, missN: 0, dodgeN: 0,
       hpLeft: null, hpMax: null, dead: false,
       burn: 0, burnN: 0,
       attackedN: 0, specialN: 0, special: {},
-      dot: {}, dotTaken: {},   // 持續傷害／異常狀態：{ 名稱: { dmg, n, restore, rn } }
-      passiveDot: {}, passiveTaken: {},   // 被動反傷
-      // 召喚物（例：菠蘿頭的影分身）。分身是獨立行動者，但算在召喚者同一陣營
+      dot: {}, dotTaken: {},
+      passiveDot: {}, passiveTaken: {},
       isSummon: false, ownerId: null, ownerName: '', summonSkill: '', summonN: 0, summons: [],
     };
   }
-
   const escRe = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  // 一般閃避：「…被 角色名 躲開了／閃開了」，灰燼的「被 灰燼 用翻滾躲開了」也算一般閃避
-  // 其他灰色（閃避色）紀錄算角色特殊迴避，例如「用翻滾的無敵幀躲開了」「攻擊穿過亡靈史內趴」
   const NORMAL_DODGE_WORDS = '(?:用翻滾)?';
   function isNormalDodge(msg, t) {
     const names = t && t.names && t.names.length ? t.names : null;
@@ -143,9 +128,6 @@
     (t.names || []).forEach(n => { s = s.split(n).join('〈T〉'); });
     return s.replace(/\d+/g, '#').trim();
   }
-
-  // 會補隊友的治療技能（就算這次剛好補到自己也算治療技能）：希露菲治癒魔術／無詠唱治癒、西米料理、回收桶；
-  // 其他技能只要同一場有補過別人也會自動算進來（例如酷拉皮卡治癒之鎖、同人的小黃金樹、緊急包紮）
   const TEAM_HEAL_SKILLS = ['sylphy_healing', 'sylphy_chantless_healing', 'simmer_cook', 'simmer_recycle_bin'];
   const TEAM_HEAL_MSG = /治癒之鎖|治癒魔術|小黃金樹|緊急包紮|番茄湯/;
   function analyze(rep) {
@@ -161,12 +143,6 @@
       return u;
     };
     const logs = rep.logs || [];
-
-    /* 召喚物：戰報把分身當成獨立行動者（actorId = summon_1），participants 裡沒有它。
-       先掃一遍 SUMMON 紀錄，把它登記成召喚者「同陣營」的單位，否則會被丟進「其他」而不計入我方輸出。
-       例：菠蘿頭 shadow_clone_jutsu →「菠蘿頭的影分身 從白煙裡滾了出來。」
-       實測分身的能力值＝本體（同技能非爆擊均傷 237 vs 251、爆擊 951 vs 958），
-       但 HP 上限只有 1，被打中就消失（戰報會寫 4075 點傷害但 actualDamage 只有 1）。 */
     logs.forEach(l => {
       if (!l || l.type !== 'SUMMON' || !l.targetId) return;
       const owner = byId.get(l.actorId);
@@ -181,17 +157,15 @@
       u.ownerName = owner ? owner.name : '';
       u.summonSkill = l.skillId || '';
       u.sub = l.skillId || '召喚物';
-      if (owner && u.luk == null) u.luk = owner.luk;          // 分身沿用本體能力值
+      if (owner && u.luk == null) u.luk = owner.luk;
       if (owner && owner.summons.indexOf(u) < 0) owner.summons.push(u);
     });
-
-    /* 持續傷害（BUFF_EFFECT）：紀錄裡只寫了「誰被扣血」，要自己找出是誰放的 */
-    const buffSrc = {};          // 受害者 id -> { buffId: 施放者 id }
-    const applyLog = [];         // BUFF_APPLY 紀錄，用來比對狀態名稱（例如「酸蝕」）
-    const prefixOwner = {};      // 技能 id 前綴 -> 使用者（viper_decay ↔ viper_poison_cloud）
-    const lastDotSrc = {};       // 受害者|名稱 -> 施放者
-    let lastZoneEnd = '';        // 最近一個散去的毒氣區域（腐蝕毒霧／毒雲瘴壁／蝮蛇領域…）
-    const pending = {};          // 受害者 id -> { 衰變名稱: 上次回復後累積的衰變 }
+    const buffSrc = {};
+    const applyLog = [];
+    const prefixOwner = {};
+    const lastDotSrc = {};
+    let lastZoneEnd = '';
+    const pending = {};
     const IGNORE_PREFIX = { basic: 1, imitated: 1, standard: 1 };
     const dotName = (l, msg) => {
       let m = msg.match(/在\s*(.+?)\s*中\s*(衰變)/); if (m) return m[1] + '・' + m[2];
@@ -212,10 +186,6 @@
       return opp.length === 1 ? opp[0] : null;
     };
     const dotSlot = (obj, name) => (obj[name] = obj[name] || { dmg: 0, n: 0, restore: 0, rn: 0 });
-
-    /* 異常狀態傷害：型別是 DAMAGE 但沒有 skillId，靠 source / passiveId / 訊息判斷
-       例：壺頭哥「積累的傷口一齊裂開…血如泉湧」＝出血、「霜華自骨縫裡炸開…凍傷了」＝凍傷
-       這類傷害不會爆擊，處理方式比照薇蝮的毒（BUFF_EFFECT）：算進造成傷害，但獨立列出、不進爆擊率分母 */
     const STATUS_PATTERNS = [
       { re: /積累的傷口一齊裂開|血如泉湧|流血|出血/, name: '出血' },
       { re: /霜華自骨縫裡炸開|凍傷|凍結|冰封/, name: '凍傷' },
@@ -234,19 +204,10 @@
       if (src === 'DIRECT' || l.passiveId) return { kind: 'dot', name: l.passiveId || '異常狀態' };
       return null;
     };
-
-    /* 西米（simmer）：
-       - 番茄湯：上菜時立即回 智力×0.9（HEAL，skillId simmer_cook），之後每跳 智力×0.15（BUFF_EFFECT，buffId simmer_dish_tomato_soup，
-         actorId 是喝湯的人）。持續回復算回西米身上，西米倒下後還在跳的也算，另外標出來。
-       - 臭臭茶：喝過的隊友被打時「憋不住放了一個屁」反打攻擊者（DAMAGE，source SIMMER_FART，actorId 是西米），傷害看西米智力。
-       - 回收桶（被動 simmer_recycle_bin）：只算「X 被這一擊打進了回收桶」那一句（掀蓋子、台詞都不算），
-         接著那筆「從桶裡爬了出來…恢復了 N HP」（HEAL，skillId simmer_recycle_bin）記成這次救回的血。 */
     const simOf = u => u.simmer || (u.simmer = { soupNow: 0, soupNowN: 0, soupTick: 0, soupTickN: 0, soupAfterDeath: 0, soupBy: {}, fart: 0, fartN: 0, fartBy: {}, bin: [], binHeal: 0 });
-    const lastDish = {};          // 隊友 id → 最後端給他的料理名稱
-    const soupOwner = {};         // 喝湯的人 id → 端湯的西米
+    const lastDish = {};
+    const soupOwner = {};
     let simmerUnit = null;
-
-    // 只有普攻／技能／反擊會判定爆擊；異常狀態與反傷不會，不能算進爆擊率分母
     const CRITABLE = { normal: 1, skill: 1, counter: 1 };
     const hit = (a, t, real, shown, kind, l) => {
       if (a) {
@@ -258,7 +219,6 @@
       }
       if (t) { t.taken.real += real; t.taken.shown += shown; if (CRITABLE[kind]) t.attackedN++; }
     };
-
     logs.forEach((l, i) => {
       if (!l || typeof l !== 'object') return;
       const a = get(l.actorId), t = get(l.targetId);
@@ -290,13 +250,12 @@
           break;
         }
         case 'BUFF_APPLY':
-          if (a && t && a.side !== t.side) {   // 只記對手上的狀態，自己給自己的增益不算
+          if (a && t && a.side !== t.side) {
             (buffSrc[t.id] = buffSrc[t.id] || {})[l.buffId || ''] = a.id;
             applyLog.push({ victim: t.id, actor: a.id, msg: String(l.message || '') });
           }
           break;
         case 'BUFF_EFFECT': {
-          // actorId = 被影響的人（例如「桐人 在毒雲瘴壁中衰變，失去了 278 點生命」）
           const msg = String(l.message || '');
           if (!a || !v) break;
           if (l.buffId === 'simmer_dish_tomato_soup' || (/番茄湯/.test(msg) && /恢復|回復/.test(msg))) {
@@ -304,7 +263,7 @@
             const cook = soupOwner[a.id] || simmerUnit;
             if (cook) {
               cook.heal += v;
-              cook.healTeam += v;   // 番茄湯是補全隊的料理
+              cook.healTeam += v;
               const sm = simOf(cook); sm.soupTick += v; sm.soupTickN++;
               if (cook.dead) sm.soupAfterDeath += v;
               const b = (sm.soupBy[a.name] = sm.soupBy[a.name] || { now: 0, tick: 0, n: 0 }); b.tick += v; b.n++;
@@ -353,7 +312,6 @@
         }
         case 'COUNTER': {
           if (l.value == null) break;
-          // 有些反擊（例如盾反）後面還會另外記一筆 isCounter 的 DAMAGE，避免重複計算
           let dup = false;
           for (let j = i + 1; j < Math.min(logs.length, i + 6); j++) {
             const x = logs[j];
@@ -363,7 +321,6 @@
           break;
         }
         case 'LUCK_EVENT': {
-          // actorId/targetId = 被砸中的人；opponentId = 觸發幸運事件的對手
           const src = get(l.opponentId);
           if (src) { src.luck += v; src.luckN++; }
           if (t) { t.luckTaken += v; t.luckTakenN++; t.taken.real += v; t.taken.shown += v; }
@@ -371,13 +328,10 @@
         }
         case 'HEAL': {
           const msg = String(l.message || '');
-          // 「桐人 離開毒氣，衰變的傷勢回復了 834 HP」：不是桐人自己的治療，而是把衰變扣掉的血還回來
           if (!l.skillId && /離開毒氣|衰變的傷勢/.test(msg)) {
             const victim = t || a;
             if (!victim) break;
             victim.healRecv += v;
-            // 規則（3 場戰報驗證）：回復＝上次回復後累積衰變的一半（捨去），但不會超過當下缺的血量
-            // 多種毒氣重疊時，依各自累積的衰變比例分攤這次回復
             const pd = pending[victim.id] || {};
             let zones = Object.keys(pd).filter(n => pd[n] > 0);
             if (!zones.length) {
@@ -413,13 +367,11 @@
           if (t) t.spRecv += v;
           break;
         case 'TEXT': {
-          // 少數技能只把回復寫在文字裡（例如芙莉蓮解除魔力限制「恢復了 12 SP」）
           const msg = String(l.message || '');
           const ms = msg.match(/恢復了\s*(\d+)\s*SP/);
           if (ms && a) { a.sp += num(ms[1]); a.spRecv += num(ms[1]); }
           const mh = msg.match(/恢復了\s*(\d+)\s*HP/);
           if (mh && a) { a.heal += num(mh[1]); const k = TEAM_HEAL_MSG.test(msg) ? 'msg:team' : (l.skillId || l.passiveId || 'msg:'); a.selfHeal[k] = (a.selfHeal[k] || 0) + num(mh[1]); a.healRecv += num(mh[1]); }
-          // 燒生命上限（例如酷拉皮卡緋紅眼「燃燒掉 174 點生命上限」），整場戰鬥不會回來
           const mb = msg.match(/(?:燃燒掉|燒掉|減少|失去|扣除)了?\s*(\d+)\s*點?生命上限/);
           if (mb && a) { a.burn += num(mb[1]); a.burnN++; }
           break;
@@ -445,22 +397,15 @@
           break;
       }
     });
-    // 補到自己的治療：如果同一招在這場有補過別人（或是已知的補師技能），就算治療技能；否則算只能補自己（吸血、自補）
     const teamSkills = new Set(TEAM_HEAL_SKILLS);
     logs.forEach(l => { if (l && l.type === 'HEAL' && l.targetId && l.actorId !== l.targetId && (l.skillId || l.passiveId)) teamSkills.add(l.skillId || l.passiveId); });
     teamSkills.add('msg:team');
     units.forEach(u => Object.entries(u.selfHeal).forEach(([k, v]) => { if (teamSkills.has(k)) u.healTeam += v; else u.healSolo += v; }));
     return units;
   }
-
-  /* 舊版累積的傷害樣本與 BOSS 圖鑑已停用，順手把留在 localStorage 的舊資料清掉，釋放空間 */
-  try { ['mdbs:samples', 'mdbs:sampleIds', 'mdbs:bossdex', 'mdbs:bossdexIds'].forEach(k => localStorage.removeItem(k)); } catch (e) {}
-
-  /* ---------- UI ---------- */
   const fmt = n => Math.round(n).toLocaleString('en-US');
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const RESULT = { WIN: '勝利', LOSE: '敗北', DRAW: '平手' };
-
   const CSS = `
   :host { all: initial; }
   * { box-sizing: border-box; }
@@ -630,8 +575,6 @@
   .c-det .spl { font-size: 12.5px; }
   @media (max-width: 760px) { .grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
   `;
-
-
   function mount() {
     if (host || !document.body) return;
     host = document.createElement('div');
@@ -642,29 +585,23 @@
     root.addEventListener('pointerdown', onDragStart);
   }
   function unmount() { if (host) { host.remove(); host = null; root = null; } }
-
   function sideLabel(rep, side) {
     if (side === 'A') return '玩家';
     if (side === 'C') return '其他';
     return rep.battleType === 'BOSS' ? 'BOSS' : rep.battleType === 'PVP' ? '對手' : '敵方';
   }
-
   function cell(v, cls) { return `<td class="${v ? cls : cls + ' zero'}">${fmt(v)}</td>`; }
-
   const critPct = (c, n) => n > 0 ? (c / n * 100).toFixed(1) + '%' : '—';
-  // 2026-09-23 以 51 場戰報、2348 次判定迴歸：爆擊率 = 幸運 ÷（幸運 + 318），95% CI K=[289,350]
   const CRIT_K = 318;
   const critTheory = luk => luk == null ? '' : (luk / (luk + CRIT_K) * 100).toFixed(1) + '%';
   function critCell(c, n, cls) {
     return `<td class="c-crit${n ? '' : ' zero'}">${critPct(c, n)}<span class="pct"> ${c}/${n}</span></td>`;
   }
-
   const STAT_LABELS = [['HP', 'hp'], ['攻擊', 'atk'], ['防禦', 'def'], ['體力', 'sta'], ['敏捷', 'agi'], ['反應', 'spd'], ['技巧', 'tec'], ['智力', 'int'], ['幸運', 'luk']];
   function statLine(s) {
     if (!s) return '';
     return STAT_LABELS.filter(([, k]) => s[k] != null).map(([l, k]) => l + ' ' + fmt(num(s[k]))).join('｜');
   }
-
   function unitHead(u) {
     const tags = (u.dead ? '<span class="tag dead">倒下</span>' : '') + (u.isAssist ? '<span class="tag ast">支援</span>' : '') +
       (u.burn ? `<span class="tag burn">燒上限 −${fmt(u.burn)}</span>` : '') +
@@ -680,7 +617,6 @@
     const subline = [u.isSummon && u.ownerName ? '本體 ' + u.ownerName : '', u.sub, hp].filter(Boolean).join('｜');
     return { tags, subline };
   }
-
   function detHtml(u, mode) {
     const k = u.byKind;
     const item = (label, val, cls) => `<div${cls ? ` class="${cls}"` : ''}><span class="k">${label}</span><b>${val}</b></div>`;
@@ -719,8 +655,6 @@
         ${item('獲得 SP', fmt(u.spRecv))}
       </div>${dotList(u.dot, '異常狀態／持續傷害（這個角色造成的）')}${dotList(u.dotTaken, '受到的異常狀態／持續傷害')}${dotList(u.passiveDot, '反傷（這個角色造成的）')}${dotList(u.passiveTaken, '受到的反傷')}${simmerList(u)}${specialList(u)}`;
   }
-
-  // 電腦：表格的一列
   const rkBadge = i => `<span class="rk${i < 3 ? ' r' + (i + 1) : ''}">${i + 1}</span>`;
   function unitRows(u, sideTot, mode, i) {
     const dmg = u.dealt[mode], tot = dmg + u.luck, take = u.taken[mode];
@@ -737,8 +671,6 @@
     if (state.open[key]) html += `<tr class="det"><td colspan="8">${detHtml(u, mode)}</td></tr>`;
     return html;
   }
-
-  // 手機：每個角色一張卡片，主數字放大，其他數字排成格子；點卡片展開細項
   function unitCard(u, sideTot, mode, i) {
     const dmg = u.dealt[mode], tot = dmg + u.luck, take = u.taken[mode];
     const pct = sideTot > 0 ? tot / sideTot * 100 : 0;
@@ -761,7 +693,6 @@
       ${open ? `<div class="c-det">${detHtml(u, mode)}</div>` : ''}
     </div>`;
   }
-
   function dotList(obj, title) {
     const ent = Object.entries(obj).sort((a, b) => b[1].dmg - a[1].dmg);
     if (!ent.length) return '';
@@ -775,8 +706,6 @@
     const sum = ent.length > 1 || totR ? `<div class="dotl">・合計<b>${fmt(totD)}</b>${totR ? `，扣掉回復後淨傷害<b>${fmt(totD - totR)}</b>` : ''}</div>` : '';
     return `<div class="spl"><span class="k">${esc(title)}</span>${rows}${sum}</div>`;
   }
-
-  /* 西米專屬：番茄湯（立即＋持續，逐位隊友）、臭臭茶放屁（逐位喝茶的隊友）、回收桶 */
   function simmerList(u) {
     const s = u.simmer;
     if (!s) return '';
@@ -798,15 +727,12 @@
     }
     return h ? `<div class="spl"><span class="k">西米料理（番茄湯／臭臭茶／回收桶）</span>${h}</div>` : '';
   }
-
   function specialList(u) {
     const ent = Object.entries(u.special).sort((a, b) => b[1] - a[1]);
     if (!ent.length) return '';
     return `<div class="spl"><span class="k">特殊迴避內容（灰色字但不是一般閃避）</span>` +
       ent.map(([k, n]) => `<div>・${esc(k.split('〈T〉').join(u.name))}<b>×${n}</b></div>`).join('') + `</div>`;
   }
-
-  // 簡易模式：只看名次、總計傷害（佔比）、承受、回血、爆擊率；不展開細項
   const simpleTags = u => (u.dead ? '<span class="tag dead">倒下</span>' : '') + (u.isAssist ? '<span class="tag ast">支援</span>' : '') + (u.isSummon ? '<span class="tag sum">分身</span>' : '');
   function sideSimple(rep, units, side, mode, mob) {
     const list = units.filter(u => u.side === side);
@@ -835,12 +761,6 @@
       ${list.length > 1 ? `<tr class="sum"><td>合計</td>${cell(S.tot, 'c-tot')}${cell(S.take, 'c-take')}${cell(S.heal, 'c-heal')}${critCell(S.crit, S.hitN)}</tr>` : ''}
       </tbody></table></div>`;
   }
-
-  // 頂部摘要：我方總傷害、MVP（綜合貢獻）、最佳坦克、最佳奶媽
-  // MVP 綜合貢獻＝各項佔全隊比例的加權平均，權重：輸出（含幸運、分身）×1 > 補隊友×0.5 > 承受傷害×0.25 = 回 SP×0.25 > 自回×0.1；
-  // 補隊友＝治療技能全算（能補隊友的招：番茄湯、小黃金樹、緊急包紮、治癒之鎖、治癒魔術…補到自己也算）
-  //      自回＝只能補自己的（吸血、自補），單獨一項。
-  // 全隊都是 0 的項目不列入。所有玩家的綜合貢獻加起來是 100%。
   const MVP_W = [['輸出', 1], ['補隊友', 0.5], ['承傷', 0.25], ['自回', 0.1], ['回SP', 0.25]];
   function contribution(mine, mode) {
     const outOf = u => u.dealt[mode] + u.luck + u.summons.reduce((s2, x) => s2 + x.dealt[mode] + x.luck, 0);
@@ -873,7 +793,6 @@
         '最佳奶媽看「治療技能」的回血：能補隊友的招都算（補到自己也算），吸血、自補不算\n\n' + mine.slice().sort((a, b) => b.healTeam - a.healTeam).map(u => `${u.name}：治療技能 ${fmt(u.healTeam)}、只補自己 ${fmt(u.healSolo)}`).join('\n'))}
     </div>`;
   }
-
   function sideTable(rep, units, side, mode) {
     const list = units.filter(u => u.side === side);
     if (!list.length) return '';
@@ -892,7 +811,6 @@
         ${list.length > 1 ? `<tr class="sum"><td>合計</td>${cell(S.dmg, 'c-dmg')}${cell(S.luck, 'c-luck')}${cell(tot, 'c-tot')}${cell(S.take, 'c-take')}${cell(S.heal, 'c-heal')}${cell(S.sp, 'c-sp')}${critCell(S.crit, S.hitN)}</tr>` : ''}
       </tbody></table></div>`;
   }
-
   function sideCards(rep, units, side, mode) {
     const list = units.filter(u => u.side === side);
     if (!list.length) return '';
@@ -905,15 +823,12 @@
       ${list.map((u, i) => unitCard(u, tot, mode, i)).join('')}
     </div>`;
   }
-
-  // 窄螢幕（手機直拿）改用卡片＋底部抽屜；轉橫或電腦就回到表格
   const narrow = () => { try { return matchMedia('(max-width: 640px)').matches; } catch (e) { return false; } };
   let wasNarrow = null;
   window.addEventListener('mdp-playback', () => { if (currentId) render(); });
   window.addEventListener('resize', () => { const n = narrow(); if (n !== wasNarrow && currentId) render(); else applyFit(); });
-
   function render() {
-    if (!currentId) return;
+    if (!tk.on || !currentId) return;
     mount();
     if (!root) return;
     const mob = narrow();
@@ -932,7 +847,6 @@
     let sub = `<span class="chip">#${esc(currentId)}</span>`, body;
     const simple = state.view === 'simple';
     if (rep && playing) {
-      // 逐行播放中：數字全部先不顯示，播完才出現
       sub = `<span class="chip play">⏳ 播放中</span>` + (rep.battleType ? `<span class="chip">${esc(rep.battleType)}</span>` : '') + `<span class="chip">#${esc(currentId)}</span>`;
       body = `<div class="playing"><div class="pi">⏳</div><div class="pt">戰報逐行播放中</div>
         <div class="ps">播完最後一行才顯示傷害、MVP 與勝負</div></div>`;
@@ -940,7 +854,6 @@
       const units = analyze(rep);
       const t = rep.createdAt ? new Date(rep.createdAt).toLocaleString() : '';
       const rc = { WIN: 'win', LOSE: 'lose', DRAW: 'draw' }[rep.result] || '';
-      // 戰報逐行播放還在播時，先不顯示勝負（播完才揭曉）
       sub = (playing ? `<span class="chip" title="逐行播放完才顯示勝負">⏳ 播放中</span>` : rep.result ? `<span class="chip ${rc}">${esc(RESULT[rep.result] || rep.result)}</span>` : '') +
         (rep.battleType ? `<span class="chip">${esc(rep.battleType)}</span>` : '') +
         `<span class="chip">#${esc(currentId)}</span>` + (t ? `<span class="chip">${esc(t)}</span>` : '');
@@ -978,8 +891,6 @@
       </div>`;
     applyFit();
   }
-
-  // 自動縮放：量出面板完整高度，超過視窗就整個等比縮小（最小 50%，再不夠才捲動）
   function applyFit() {
     const p = root && root.querySelector('.panel');
     if (!p) return;
@@ -989,13 +900,13 @@
     const top = p.getBoundingClientRect().top;
     const avail = Math.max(200, window.innerHeight - top - 12);
     if (mob || state.collapsed || !state.fit || !cache.get(currentId) || document.documentElement.hasAttribute('data-mdp-playing')) {
-      if (!mob) p.style.maxHeight = avail + 'px';      // 不縮放時也不要超出視窗底部
+      if (!mob) p.style.maxHeight = avail + 'px';
       if (lab) lab.textContent = state.fit ? '100%' : '關';
       return;
     }
     p.style.maxHeight = 'none';
     let H = p.offsetHeight;
-    if (H > avail) { p.classList.add('dense'); H = p.offsetHeight; }   // 先把行距收緊，還不夠再縮放
+    if (H > avail) { p.classList.add('dense'); H = p.offsetHeight; }
     let sc = Math.min(1, avail / H);
     if (sc < 0.5) { sc = 0.5; p.style.maxHeight = Math.floor(avail / sc) + 'px'; }
     if (sc < 0.999) {
@@ -1004,7 +915,6 @@
     }
     if (lab) lab.textContent = Math.round(sc * 100) + '%';
   }
-
   function onClick(e) {
     const btn = e.target.closest('[data-act]');
     if (btn) {
@@ -1020,13 +930,11 @@
     const row = e.target.closest('tr[data-key], .card[data-key]');
     if (row) { const k = row.dataset.key; state.open[k] = !state.open[k]; render(); }
   }
-
   function onDragStart(e) {
     const hd = e.target.closest('[data-drag]');
     if (!hd || e.target.closest('button')) return;
     const panel = hd.parentElement;
     const r = panel.getBoundingClientRect();
-    // 縮放時改成以左上角為準，畫面位置不跳動
     panel.style.transformOrigin = 'top left'; panel.style.left = r.left + 'px'; panel.style.top = r.top + 'px'; panel.style.right = 'auto';
     const dx = e.clientX - r.left, dy = e.clientY - r.top;
     const move = ev => {
@@ -1040,11 +948,10 @@
     window.addEventListener('pointerup', up);
     e.preventDefault();
   }
-
-  /* ---------- SPA 路由監聽 ---------- */
   function routeId() { const m = location.pathname.match(/^\/reports\/(\d+)\/?$/); return m ? m[1] : null; }
   function onRoute() {
     if (!document.body) return;
+    if (!tk.on) { currentId = null; unmount(); return; }
     const id = routeId();
     if (id === currentId) return;
     currentId = id;
@@ -1062,17 +969,14 @@
   window.addEventListener('popstate', () => setTimeout(onRoute, 0));
   document.addEventListener('DOMContentLoaded', onRoute);
   setInterval(onRoute, 800);
+  tk.onToggle(() => { currentId = null; onRoute(); });
 })();
 } }),
-    Object.assign({"id": "playback", "icon": "▶️", "name": "戰報逐行播放", "desc": "Boss、切磋／茶渡、遭遇戰、戰報頁：戰鬥過程一行一行出現，最後才揭曉勝負。", "feats": ["逐行播放，可「跳過，直接看結果」、播完可重播", "播完前蓋住勝利／失敗／平手、死亡標記與死亡橫幅", "事件「遭遇戰鬥！」不先寫結果", "播放中戰報統計只顯示「⏳ 播放中」，不顯示總行數", "每一行後面顯示被打／被補的人剩多少血", "「⚙ 戰報播放」設定：逐行／直接顯示、剩餘血量、每行間隔、自動捲動"], "ver": "1.2.3", "at": "start"}, { run: function () {
-// ===== 戰報逐行播放 1.2.3（mydoujin_戰報播放.user.js）=====
+    Object.assign({"id": "playback", "icon": "▶️", "name": "戰報逐行播放", "desc": "Boss、切磋／茶渡、遭遇戰、戰報頁：戰鬥過程一行一行出現，最後才揭曉勝負。", "feats": ["逐行播放，可「跳過，直接看結果」、播完可重播", "播完前蓋住勝利／失敗／平手、死亡標記與死亡橫幅", "事件「遭遇戰鬥！」不先寫結果", "播放中戰報統計只顯示「⏳ 播放中」，不顯示總行數", "每一行後面顯示被打／被補的人剩多少血", "「⚙ 戰報播放」設定：逐行／直接顯示、剩餘血量、每行間隔、自動捲動"], "ver": "1.2.4", "at": "start"}, { run: function (TK) {
+// ===== 戰報逐行播放 1.2.4（mydoujin_戰報播放.user.js）=====
 (function () {
   'use strict';
-
-  /* 原理：遊戲把整場戰報一次畫好，這支腳本只是先把每一行藏起來、照間隔一行一行放出來，
-     同時把「勝利／失敗／平手」「死亡」標籤、頂端「你的角色死亡了」橫幅、隊伍成員的存活狀態
-     暫時蓋住，播完才恢復。不改任何資料。
-     剩餘血量：從戰報資料逐行推算（受傷扣、回復加、倒下歸零），並用戰報最後的「剩餘 HP」校正。 */
+  const tk = (typeof TK === 'object' && TK) || { on: true, onToggle() {} };
   const CFG_KEY = 'mdp:cfg';
   const DEF = { mode: 'step', sec: 0.6, hp: true };
   const load = () => { try { return Object.assign({}, DEF, JSON.parse(localStorage.getItem(CFG_KEY)) || {}); } catch (e) { return Object.assign({}, DEF); } };
@@ -1080,57 +984,45 @@
   let cfg = load();
   const clampSec = v => Math.max(0.05, Math.min(10, Number(v) || DEF.sec));
   cfg.sec = clampSec(cfg.sec);
-
-  // 只在這三種頁面作用：Boss、玩家詳情（切磋／茶渡）、單篇戰報
   const routeOk = () => /^\/(boss|players\/[^/]+|reports\/[^/]+)?\/?$/.test(location.pathname);
-  const homePage = () => /^\/?$/.test(location.pathname);   // 首頁：事件遭遇戰按「查看戰報」開出來的視窗
-
-  /* ---------- 結果遮蔽 ---------- */
+  const homePage = () => /^\/?$/.test(location.pathname);
   const DEATH_BANNER = '你的角色死亡了，請進行轉生';
   const STATUS_RE = /^.+ · Lv\.\d+ · (死亡|存活)$/;
   const OUTCOME_RE = /^(勝利|失敗|敗北|平手|平局|死亡)$/;
-  let guard = false, guardTimer = null;        // 戰鬥送出後到播放結束前，都要蓋住結果
+  let guard = false, guardTimer = null;
   function ensureStyle() {
     if (document.getElementById('mdp-style')) return;
     const st = document.createElement('style');
     st.id = 'mdp-style';
     st.textContent = '[data-mdp-hide]{visibility:hidden !important}[data-mdp-gone]{display:none !important}' +
-      // 播放中／等戰報時：對話框標題（戰報）後面的標籤直接用 CSS 蓋住，React 重畫也不會露出來
-      // 逐行模式：戰報視窗一打開就先蓋住，播完（data-mdp-reveal）才露出
       'html[data-mdp-playing] [data-part="title"] ~ *, html[data-mdp-guard] [data-part="title"] ~ *,' +
       'html.mdp-step:not([data-mdp-reveal]) [data-mdp-report] [data-part="title"] ~ *,' +
       'html.mdp-step:not([data-mdp-reveal]) [data-mdp-report] h2 ~ span,' +
       'html[data-mdp-playing] [role="dialog"] h2 ~ span, html[data-mdp-guard] [role="dialog"] h2 ~ span{visibility:hidden !important}' +
-      // 事件視窗的「遭遇戰鬥！ (勝利)」：把原字縮成 0、換成不帶結果的字，顏色也統一（原本勝負用不同顏色）
       '[data-mdp-enc]{font-size:0 !important;color:#a0aec0 !important}' +
       '[data-mdp-enc]::after{content:"遭遇戰鬥！（勝負在戰報最後揭曉）";font-size:14px;font-weight:700}';
     (document.head || document.documentElement).appendChild(st);
   }
   function hideOutcome() {
     ensureStyle();
-    // 頂端死亡橫幅
     document.querySelectorAll('div').forEach(d => {
       if (d.childElementCount === 0 && d.textContent.trim() === DEATH_BANNER) d.setAttribute('data-mdp-gone', '');
     });
-    // 隊伍成員「… · Lv.58 · 存活／死亡」：不管死活一律蓋住，免得從誰被蓋住猜出結果
     document.querySelectorAll('p').forEach(p => {
       if (p.childElementCount === 0 && STATUS_RE.test(p.textContent.trim())) p.setAttribute('data-mdp-hide', '');
     });
-    // 戰報視窗裡的「勝利／失敗／平手／平局」「死亡」標籤：直接找文字，不靠標題位置（Boss 頁的視窗結構不同）
     document.querySelectorAll('[role="dialog"], [role="alertdialog"], [data-scope="dialog"][data-part="content"]').forEach(dlg => {
       dlg.querySelectorAll('span, p, div').forEach(e => {
         if (e.childElementCount === 0 && OUTCOME_RE.test(e.textContent.trim()) && !e.closest('[data-mdp-bar]')) e.setAttribute('data-mdp-hide', '');
       });
     });
-    // 標題「戰報」後面的勝負、死亡標籤蓋住；不限定在 role=dialog 裡
     document.querySelectorAll('h2, h3, p, div, span').forEach(title => {
       if (title.childElementCount !== 0 || title.textContent.trim() !== '戰報' || title.closest('[data-mdp-bar]')) return;
       for (let s = title.nextElementSibling; s; s = s.nextElementSibling) {
-        if (OUTCOME_RE.test(s.textContent.trim())) s.setAttribute('data-mdp-hide', '');   // 只蓋勝負／死亡標籤，不動其他內容
+        if (OUTCOME_RE.test(s.textContent.trim())) s.setAttribute('data-mdp-hide', '');
       }
     });
   }
-  // 事件遭遇戰：事件結算視窗會直接寫「遭遇戰鬥！ (勝利／失敗／平手)」，逐行模式下一律改成不寫結果
   const ENC_RE = /^遭遇戰鬥！\s*[(（]\s*(勝利|失敗|平手)\s*[)）]$/;
   function maskEncounter() {
     if (cfg.mode !== 'step') {
@@ -1142,7 +1034,6 @@
       if (e.childElementCount === 0 && !e.hasAttribute('data-mdp-enc') && ENC_RE.test(e.textContent.trim())) e.setAttribute('data-mdp-enc', '');
     });
   }
-  // 讓其他腳本（戰報統計）知道正在逐行播放，播完前不要顯示勝負
   function announce(playing) {
     try {
       const de = document.documentElement;
@@ -1159,14 +1050,12 @@
   }
   const hiding = () => guard || !!(cur && cur.playing);
   function armGuard() {
-    if (cfg.mode !== 'step') return;
+    if (!tk.on || cfg.mode !== 'step') return;
     guard = true; hideOutcome();
     document.documentElement.setAttribute('data-mdp-guard', '1');
     clearTimeout(guardTimer);
-    guardTimer = setTimeout(() => { guard = false; document.documentElement.removeAttribute('data-mdp-guard'); if (!hiding()) showOutcome(); }, 45000);   // 保險：45 秒沒等到戰報就放掉
+    guardTimer = setTimeout(() => { guard = false; document.documentElement.removeAttribute('data-mdp-guard'); if (!hiding()) showOutcome(); }, 45000);
   }
-
-  /* 戰鬥送出時就先蓋住結果：Boss 頁送出挑戰後，隊伍狀態可能比戰報視窗先更新 */
   const origFetch = window.fetch;
   window.fetch = function (input, init) {
     const p = origFetch.apply(this, arguments);
@@ -1175,16 +1064,12 @@
       const method = String((init && init.method) || (input && input.method) || 'GET').toUpperCase();
       const battlePost = method === 'POST' && (/\/api\/dungeon\/challenge(?:[?#]|$)/.test(url) || /\/api\/players\/[^/]+\/[^/?#]+(?:[?#]|$)/.test(url));
       if (battlePost) armGuard();
-      // 順手把遊戲自己拿到的戰報資料記下來，用來算每一行的剩餘血量（不另外打 API）
       if (battlePost || (method === 'GET' && /\/api\/battle-reports\/\d+(?:[?#]|$)/.test(url))) {
         p.then(res => { if (res && res.ok) res.clone().json().then(remember).catch(() => {}); }).catch(() => {});
       }
     } catch (e) {}
     return p;
   };
-
-  /* ---------- 找戰鬥過程 ---------- */
-  // 每一行是一個 flex，裡面兩個 <p>：行號、內容
   const isRow = el => !!el && el.childElementCount === 2 && el.children[0].tagName === 'P' && el.children[1].tagName === 'P' && /^\d+$/.test(el.children[0].textContent.trim());
   function findLogBoxes() {
     const out = [];
@@ -1198,14 +1083,10 @@
     return out;
   }
   const rowsOf = box => [...box.children].filter(isRow);
-  // 一行的戰報文字（不含這支腳本加上去的血量標籤）
   const msgText = row => { let t = ''; row.children[1].childNodes.forEach(n => { if (!(n.nodeType === 1 && n.hasAttribute('data-mdp-hp'))) t += n.textContent; }); return t; };
   const sigOf = box => { const r = rowsOf(box); return r.length + '|' + (r[0] ? msgText(r[0]).slice(0, 40) : '') + '|' + (r.length ? msgText(r[r.length - 1]).slice(0, 40) : ''); };
-
-
-  /* ---------- 剩餘血量 ---------- */
   const API = 'https://mydoujin-backend.onrender.com';
-  const datasets = [];      // 最近拿到的戰報資料 { logs, participants, reportId }
+  const datasets = [];
   function findBattle(d, depth) {
     if (!d || typeof d !== 'object' || depth > 3) return null;
     if (Array.isArray(d.logs) && d.logs.some(l => l && typeof l === 'object')) return d;
@@ -1233,8 +1114,6 @@
     return idx;
   };
   const logText = l => typeof l === 'string' ? l : (l.message ?? l.description ?? JSON.stringify(l));
-
-  // 戰報資料要跟畫面上的行一一對得起來才用：行數一樣、頭中尾三行文字相同
   function matchDataset(rows) {
     const n = rows.length;
     for (const ds of datasets) {
@@ -1245,12 +1124,6 @@
     }
     return null;
   }
-
-  /* 推算方式（用 20 場實際戰報驗證過，最後剩餘 HP 全部對得上）：
-     - 起始血量＝滿血；造成傷害用 actualDamage（真正扣掉的血），反擊沒有 actualDamage 就用數值、扣到 0 為止
-     - 治療、持續回復、文字裡的「回復了 N HP」加血，不超過上限；「失去了 N HP」扣血
-     - 有戰報最後的「剩餘 HP」或「倒下了」就從結尾倒推回來校正。
-       愛國者這種殘血後重生的 BOSS，重生之後改用倒推的數字 */
   function computeHp(ds) {
     const logs = ds.logs, P = ds.participants || {};
     const U = {};
@@ -1266,7 +1139,6 @@
         case 'DAMAGE': case 'BLOCK': ev(l.targetId, i, -real); break;
         case 'COUNTER': {
           if (l.value == null) break;
-          // 有些反擊後面還會再記一筆 isCounter 的 DAMAGE，那筆才算
           let dup = false;
           for (let j = i + 1; j < Math.min(logs.length, i + 6); j++) {
             const x = logs[j];
@@ -1303,7 +1175,7 @@
         }
       }
     });
-    const out = {};   // 戰報第 i 筆 → [{ name, hp, max, side }]
+    const out = {};
     Object.values(U).forEach(u => {
       const E = u.ev.filter(e => !u.anchor || e.i <= u.anchor.i);
       if (!E.length) return;
@@ -1319,7 +1191,6 @@
       else if (!B) V = F;
       else if (Math.abs(F[F.length - 1] - u.anchor.v) <= 1) V = F;
       else {
-        // 推算的結尾對不上：多半是殘血後重生。掉到 1 滴血之後、下一次真的扣血或補血之前照推算的，之後改用倒推的
         let r = F.findIndex(x => x <= 1);
         if (r >= 0) { while (r + 1 < E.length && E[r + 1].d === 0) r++; V = F.map((x, k) => k <= r ? x : B[k]); }
         else V = B;
@@ -1329,7 +1200,6 @@
     });
     return out;
   }
-
   const fmt = n => Number(n).toLocaleString('en-US');
   const hpColor = (hp, max) => { if (!max) return '#a0aec0'; const r = hp / max; return r > 0.5 ? '#68d391' : r > 0.25 ? '#f6e05e' : '#fc8181'; };
   function chipEl(list) {
@@ -1354,15 +1224,13 @@
     return wrap;
   }
   const clearChips = box => { box.querySelectorAll('[data-mdp-hp]').forEach(e => e.remove()); };
-
-  const hpState = new WeakMap();   // box → { sig, ds, withP }
+  const hpState = new WeakMap();
   function requestReport(ds) {
     if (!ds.reportId || ds.fetching || ds.failed) return;
     let token = null;
     try { token = localStorage.getItem('token'); } catch (e) {}
     if (!token) { ds.failed = true; return; }
     ds.fetching = true;
-    // 挑戰／切磋的回傳沒有角色血量上限時，讀一次這場的戰報補上（跟戰報頁讀的是同一份）
     origFetch.call(window, API + '/api/battle-reports/' + ds.reportId, { headers: { Authorization: 'Bearer ' + token } })
       .then(r => r.json())
       .then(j => { if (j && j.participants) ds.participants = j.participants; else ds.failed = true; })
@@ -1375,21 +1243,17 @@
     if (!rows.length) return;
     const sig = sigOf(box);
     const st = hpState.get(box);
-    // 已經畫好、而且沒有新的血量上限資料進來 → 不用重畫
     if (st && st.sig === sig && (st.withP || !st.ds.participants)) return;
     const ds = matchDataset(rows);
-    if (!ds) return;            // 資料還沒到，下一輪再試
+    if (!ds) return;
     const res = computeHp(ds);
     clearChips(box);
     rows.forEach((row, k) => { const list = res[ds.idx[k]]; if (list && list.length) row.children[1].appendChild(chipEl(list)); });
     hpState.set(box, { sig, ds, withP: !!ds.participants });
     if (!ds.participants) requestReport(ds);
   }
-
-  /* ---------- 播放 ---------- */
-  let cur = null;            // { box, rows, idx, playing, timer, bar, sig }
-  const seen = new WeakMap(); // box → sig，同一份戰報不重播
-
+  let cur = null;
+  const seen = new WeakMap();
   const setReveal = on => { try { if (on) document.documentElement.setAttribute('data-mdp-reveal', '1'); else document.documentElement.removeAttribute('data-mdp-reveal'); } catch (e) {} };
   function startPlayback(box) {
     stopPlayback(false);
@@ -1404,7 +1268,6 @@
     cur.bar = makeBar(box);
     step();
   }
-
   function step() {
     if (!cur || !cur.playing) return;
     if (!cur.box.isConnected) { stopPlayback(false); return; }
@@ -1418,7 +1281,6 @@
     if (cur.idx >= cur.rows.length) { finish(); return; }
     cur.timer = setTimeout(step, clampSec(cfg.sec) * 1000);
   }
-
   function finish() {
     if (!cur) return;
     clearTimeout(cur.timer);
@@ -1431,7 +1293,6 @@
     announce(false);
     updateBar();
   }
-
   function stopPlayback(reveal) {
     if (!cur) return;
     clearTimeout(cur.timer);
@@ -1441,7 +1302,6 @@
     if (!guard) showOutcome();
     announce(false);
   }
-
   function replay() {
     if (!cur) return;
     clearTimeout(cur.timer);
@@ -1454,8 +1314,6 @@
     updateBar();
     step();
   }
-
-  /* 戰鬥過程上方的小控制列 */
   const BAR_CSS = `
   :host { all: initial; display: block; margin: 4px 0 6px; }
   * { box-sizing: border-box; font-family: "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif; }
@@ -1487,27 +1345,24 @@
       ? `<span>▶ 播放中・第 ${Math.min(cur.idx, n)} 行</span><span class="dim">每行 ${clampSec(cfg.sec)} 秒</span><span class="sp"></span><button data-a="skip">跳過，直接看結果</button>`
       : `<span>✔ 播放完畢（共 ${n} 行）</span><span class="sp"></span><button data-a="replay">重播</button>`) + `</div>`;
   }
-
-  /* 有新的戰鬥過程出現就開始播 */
   function scan() {
+    if (!tk.on) return;
     try { maskEncounter(); } catch (e) {}
     try {
       ensureStyle();
       document.documentElement.classList.toggle('mdp-step', cfg.mode === 'step');
-      // 標記「戰報」視窗（標題文字是「戰報」），CSS 只蓋這種視窗的標籤
       document.querySelectorAll('[role="dialog"] h2, [role="alertdialog"] h2, [data-part="title"]').forEach(t => {
         if (t.textContent.trim() !== '戰報') return;
         const d = t.closest('[role="dialog"], [role="alertdialog"], [data-scope="dialog"][data-part="content"]') || (t.matches('[data-part="title"]') ? t.parentElement : null);
         if (d && !d.hasAttribute('data-mdp-report')) d.setAttribute('data-mdp-report', '');
       });
-      // 戰報視窗都關了：下一次打開的視窗要重新蓋住
       if (!cur && !findLogBoxes().length) setReveal(false);
     } catch (e) {}
     if (!routeOk()) { if (cur) stopPlayback(true); guard = false; document.documentElement.removeAttribute('data-mdp-guard'); return; }
     if (cur && !cur.box.isConnected) stopPlayback(false);
     if (cur && cur.box.isConnected && cur.playing) {
       const s = sigOf(cur.box);
-      if (s !== cur.sig) startPlayback(cur.box);      // 同一個視窗換成另一場
+      if (s !== cur.sig) startPlayback(cur.box);
     }
     const boxes = findLogBoxes().filter(b => !homePage() || b.closest('[role="dialog"]'));
     boxes.forEach(box => { try { ensureHp(box); } catch (e) {} });
@@ -1522,8 +1377,6 @@
     if (hiding()) hideOutcome();
     mountSettings();
   }
-
-  /* ---------- 設定按鈕 ---------- */
   const SET_CSS = `
   :host { all: initial; display: inline-block; vertical-align: middle; }
   * { box-sizing: border-box; font-family: "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif; }
@@ -1543,9 +1396,8 @@
   .hint { color: #718096; font-size: 11px; line-height: 1.5; }
   .row.off { opacity: .4; }
   `;
-  const hosts = new Map();   // 位置 → host
+  const hosts = new Map();
   let popOpen = false;
-
   function renderSettings(sr) {
     const step = cfg.mode === 'step';
     sr.innerHTML = `<style>${SET_CSS}</style><button class="open" data-a="toggle">⚙ 戰報播放</button>` + (popOpen ? `
@@ -1571,7 +1423,6 @@
     else { pop.style.bottom = 'auto'; pop.style.top = (r.bottom + 6) + 'px'; }
   }
   function rerenderAll() { hosts.forEach(h => { if (h.isConnected) renderSettings(h.__sr); }); }
-
   function makeSettings(extraCss) {
     const host = document.createElement('span');
     host.setAttribute('data-mdp-set', '');
@@ -1585,7 +1436,7 @@
       if (b.dataset.a === 'toggle') { popOpen = !popOpen; rerenderAll(); }
       else if (b.dataset.a === 'mode') {
         cfg.mode = b.dataset.v; save(); rerenderAll();
-        if (cfg.mode === 'instant' && cur && cur.playing) finish();     // 正在播的直接揭曉
+        if (cfg.mode === 'instant' && cur && cur.playing) finish();
       }
     });
     sr.addEventListener('change', e => {
@@ -1597,7 +1448,6 @@
     renderSettings(sr);
     return host;
   }
-
   function mountAt(key, find, place, css) {
     const old = hosts.get(key);
     if (old && old.isConnected) return;
@@ -1607,15 +1457,12 @@
     place(target, h);
     hosts.set(key, h);
   }
-
   function mountSettings() {
     const p = location.pathname;
     if (/^\/reports\/[^/]+\/?$/.test(p)) {
-      // 戰報頁：放在「戰鬥過程」標題旁邊
       mountAt('report', () => [...document.querySelectorAll('h2')].find(h => h.textContent.replace(/⚙.*$/, '').trim() === '戰鬥過程' && !h.querySelector('[data-mdp-set]')) || null,
         (h, host) => { h.style.display = 'flex'; h.style.alignItems = 'center'; h.style.gap = '10px'; h.appendChild(host); });
     } else if (/^\/boss\/?$/.test(p)) {
-      // Boss 頁：隊伍代碼那一列的最右邊；還沒有隊伍時放在「隊伍 刷新」那一列
       mountAt('boss', () => {
         const code = [...document.querySelectorAll('p')].find(e => e.textContent.trim().startsWith('隊伍代碼：'));
         if (code) return code.parentElement;
@@ -1623,23 +1470,18 @@
         return h ? h.parentElement : null;
       }, (row, host) => row.appendChild(host), 'margin-left:auto;');
     } else if (/^\/players\/[^/]+\/?$/.test(p)) {
-      // 玩家頁：放在「友好切磋」「我要茶渡你」上面，兩顆按鈕往下推
       mountAt('duel', () => {
         const b = [...document.querySelectorAll('button')].find(x => /^(友好切磋|切磋中)/.test(x.textContent.trim()));
         return b && b.parentElement && b.parentElement.parentElement ? b.parentElement.parentElement : null;
       }, (col, host) => col.parentElement.insertBefore(host, col), 'display:block;margin-top:24px;');
     }
   }
-
-  // 點到設定視窗外面就收起來
   document.addEventListener('click', e => {
     if (!popOpen) return;
     const path = e.composedPath ? e.composedPath() : [];
     if (![...hosts.values()].some(h => path.includes(h))) { popOpen = false; rerenderAll(); }
   }, true);
   window.addEventListener('resize', () => { if (popOpen) hosts.forEach(h => h.isConnected && placePop(h.__sr)); });
-
-  /* ---------- 啟動：DOM 一變就檢查（在畫面畫出來之前就把行藏好） ---------- */
   let scheduled = false;
   function schedule() {
     if (scheduled) return;
@@ -1654,36 +1496,44 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
+  tk.onToggle(on => {
+    const de = document.documentElement;
+    if (on) { findLogBoxes().forEach(b => seen.set(b, sigOf(b))); schedule(); return; }
+    stopPlayback(true);
+    guard = false; clearTimeout(guardTimer);
+    de.removeAttribute('data-mdp-guard'); de.classList.remove('mdp-step'); setReveal(false);
+    showOutcome();
+    document.querySelectorAll('[data-mdp-enc]').forEach(e => e.removeAttribute('data-mdp-enc'));
+    document.querySelectorAll('[data-mdp-report]').forEach(e => e.removeAttribute('data-mdp-report'));
+    findLogBoxes().forEach(b => { clearChips(b); hpState.delete(b); });
+    popOpen = false;
+    hosts.forEach(h => h.remove()); hosts.clear();
+  });
 })();
 } }),
-    Object.assign({"id": "cooldown", "icon": "⏱️", "name": "Boss 冷卻倒數", "desc": "Boss 頁「還有 N 分鐘」改成每秒跳動的「還有 M 分 SS 秒」。", "feats": ["同場打的人用戰報時間＋30 分鐘，一進頁面就準到秒", "別場打的隊友在分鐘跳號時補查校正（每段冷卻最多 8 次）", "冷卻結束顯示「已結束 ✅」並自動按「刷新」（可點「⟳ 自動刷新」開關）"], "ver": "1.0.0", "at": "start"}, { run: function () {
-// ===== Boss 冷卻倒數 1.0.0（mydoujin_Boss冷卻倒數.user.js）=====
+    Object.assign({"id": "cooldown", "icon": "⏱️", "name": "Boss 冷卻倒數", "desc": "Boss 頁「還有 N 分鐘」改成每秒跳動的「還有 M 分 SS 秒」。", "feats": ["同場打的人用戰報時間＋30 分鐘，一進頁面就準到秒", "別場打的隊友在分鐘跳號時補查校正（每段冷卻最多 8 次）", "冷卻結束顯示「已結束 ✅」並自動按「刷新」（可點「⟳ 自動刷新」開關）"], "ver": "1.0.1", "at": "start"}, { run: function (TK) {
+// ===== Boss 冷卻倒數 1.0.1（mydoujin_Boss冷卻倒數.user.js）=====
 (function () {
   'use strict';
-
-  const COOLDOWN_MS = 30 * 60 * 1000;   // Boss 冷卻 30 分鐘（伺服器顯示為無條件進位的分鐘數）
+  const tk = (typeof TK === 'object' && TK) || { on: true, onToggle() {} };
+  const COOLDOWN_MS = 30 * 60 * 1000;
   const MIN = 60000;
-  const EXACT_W = 2000;                 // 誤差 ≤ 2 秒視為精準
-  const MAX_PROBES = 8;                 // 每段冷卻最多自行查詢幾次來校正秒數
+  const EXACT_W = 2000;
+  const MAX_PROBES = 8;
   const STORE = 'mdbc:v1';
   const CD_RE = /^(.*?)的\s*Boss\s*挑戰冷卻中，還有\s*(\d+)\s*(分鐘|秒)/;
-
   let apiBase = 'https://mydoujin-backend.onrender.com';
-  let offset = 0;                       // 伺服器時間 − 本機時間
-  let state = null;                     // 最新的 /api/dungeon/party 回應
-  let me = null;                        // { id, nickname }
+  let offset = 0;
+  let state = null;
+  let me = null;
   const anchorTried = new Set();
-
-  /* ---------- 冷卻結束時間：以區間 [lo, hi] 逐步收斂（本機時鐘） ---------- */
   let cds = {};
   try { cds = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) { cds = {}; }
   const save = () => {
     const now = Date.now();
     for (const k of Object.keys(cds)) if (cds[k].hi < now - 10 * MIN) delete cds[k];
-    try { localStorage.setItem(STORE, JSON.stringify(cds)); } catch (e) { /* 無痕模式等 */ }
+    try { localStorage.setItem(STORE, JSON.stringify(cds)); } catch (e) {  }
   };
-
-  // 在 [tSend, tRecv] 之間伺服器說「還有 m 分鐘」（無條件進位）→ end ∈ (tSend+(m-1)分, tRecv+m分]
   function observe(key, m, unit, tSend, tRecv) {
     let lo, hi;
     if (unit === '秒') { lo = tSend + (m - 1) * 1000; hi = tRecv + m * 1000; }
@@ -1693,29 +1543,24 @@
       c.lo = Math.max(c.lo, lo); c.hi = Math.min(c.hi, hi);
       if (c.lo > c.hi) { const mid = (c.lo + c.hi) / 2; c.lo = c.hi = mid; }
     } else {
-      cds[key] = { lo, hi, probes: 0, src: 'obs', id: tRecv };   // 新的一段冷卻
+      cds[key] = { lo, hi, probes: 0, src: 'obs', id: tRecv };
     }
   }
-
   function clearDone(keysInBlockers, tSend) {
-    // 伺服器已不再列出的人 → 冷卻已結束
     for (const k of Object.keys(cds)) {
       if (!keysInBlockers.has(k) && cds[k].hi > tSend && cds[k].lo < tSend + 20 * MIN) {
         cds[k].hi = Math.min(cds[k].hi, tSend); cds[k].lo = Math.min(cds[k].lo, cds[k].hi);
       }
     }
   }
-
   const keyOf = name => {
     const mem = state?.party?.members?.find(x => x.nickname === name);
     if (mem) return mem.userId;
     if (me && (me.nickname === name || !name)) return me.id;
     return 'name:' + name;
   };
-
-  /* ---------- 攔截遊戲自己的請求（不額外增加流量） ---------- */
   const origFetch = window.fetch;
-  window.fetch = function (input, init) {
+  window.fetch = function (input) {
     const url = typeof input === 'string' ? input : (input && input.url) || '';
     const tSend = Date.now();
     const p = origFetch.apply(this, arguments);
@@ -1727,7 +1572,6 @@
     }
     return p;
   };
-
   function onApi(url, j, tSend, tRecv) {
     if (!j || typeof j !== 'object') return;
     const b = url.match(/^(https?:\/\/[^/]+)\/api\//); if (b) apiBase = b[1];
@@ -1739,7 +1583,6 @@
     if (/\/users\/me/.test(url) && j.id) me = { id: j.id, nickname: j.nickname };
     if (Array.isArray(j.blockers)) onParty(j, tSend, tRecv);
   }
-
   function onParty(j, tSend, tRecv) {
     state = j;
     if (j.viewerId && !me) me = { id: j.viewerId, nickname: j.party?.members?.find(x => x.userId === j.viewerId)?.nickname };
@@ -1753,11 +1596,9 @@
     }
     clearDone(seen, tSend);
     save();
-    if (seen.size) tryAnchor([...seen]);
+    if (seen.size && tk.on) tryAnchor([...seen]);
     render();
   }
-
-  /* ---------- 精準校正 1：用戰報建立時間 + 30 分鐘 ---------- */
   async function tryAnchor(keys) {
     const need = keys.filter(k => !k.startsWith('name:') && cds[k] && cds[k].hi - cds[k].lo > EXACT_W && !anchorTried.has(k + '@' + cds[k].id));
     if (!need.length) return;
@@ -1772,18 +1613,16 @@
         if (!rep) continue;
         const end = Date.parse(rep.createdAt) - offset + COOLDOWN_MS;
         const c = cds[k];
-        if (c && end >= c.lo - 1500 && end <= c.hi + 1500) {   // 跟伺服器顯示的分鐘數吻合才採用
+        if (c && end >= c.lo - 1500 && end <= c.hi + 1500) {
           c.lo = c.hi = end; c.src = 'report';
         }
       }
       save(); render();
-    } catch (e) { /* 失敗就用分鐘區間 */ }
+    } catch (e) {  }
   }
-
-  /* ---------- 精準校正 2：在「分鐘跳號」的時間點自己查一次隊伍，二分法夾出秒數 ---------- */
   let probeTimer = null;
   function scheduleProbe() {
-    if (probeTimer || !onBoss() || document.hidden) return;
+    if (!tk.on || probeTimer || !onBoss() || document.hidden) return;
     const now = Date.now();
     let best = null;
     for (const [k, c] of Object.entries(cds)) {
@@ -1800,24 +1639,20 @@
       const c = cds[best.k];
       if (!c || !onBoss()) return;
       c.probes = (c.probes || 0) + 1;
-      try { await window.fetch(apiBase + '/api/dungeon/party', { headers: auth() }); } catch (e) { /* ignore */ }
+      try { await window.fetch(apiBase + '/api/dungeon/party', { headers: auth() }); } catch (e) {  }
       scheduleProbe();
     }, Math.max(0, best.at - now));
   }
-
   const auth = () => {
     const t = localStorage.getItem('token');
     return t ? { Authorization: 'Bearer ' + t } : {};
   };
   const onBoss = () => /^\/boss\/?$/.test(location.pathname);
-
-  /* ---------- 畫面 ---------- */
   const fmt = ms => {
     const s = Math.max(0, Math.ceil(ms / 1000));
     const m = Math.floor(s / 60);
     return (m ? m + ' 分 ' : '') + String(s % 60).padStart(m ? 2 : 1, '0') + ' 秒';
   };
-
   function ensureStyle() {
     if (document.getElementById('mdbc-style')) return;
     const st = document.createElement('style');
@@ -1831,10 +1666,9 @@
       [data-mdbc] > .mdbc .tg{margin-left:10px;font-size:.8em;color:#a0aec0;cursor:pointer;text-decoration:underline dotted;white-space:nowrap}`;
     (document.head || document.documentElement).appendChild(st);
   }
-
   let lastAuto = 0, autoCount = 0;
   function render() {
-    if (!document.body || !onBoss()) return;
+    if (!tk.on || !document.body || !onBoss()) return;
     ensureStyle();
     const now = Date.now();
     let anyDone = false;
@@ -1858,7 +1692,7 @@
       if (!c) html = `${esc(name)}的 Boss 挑戰冷卻中，還有 <b>${m[2]} ${m[3]}</b>。`;
       else {
         const w = c.hi - c.lo;
-        const left = (w > EXACT_W ? (c.lo + c.hi) / 2 : c.hi) - now;   // 校正中先顯示區間中點
+        const left = (w > EXACT_W ? (c.lo + c.hi) / 2 : c.hi) - now;
         if (c.hi - now <= 0) { html = `${esc(name)}的 Boss 冷卻 <span class="ok">已結束 ✅</span>`; anyDone = true; }
         else if (left <= 0) html = `${esc(name)}的 Boss 冷卻 <b>即將結束…</b>`;
         else {
@@ -1875,27 +1709,28 @@
     if (anyDone && autoRefreshOn() && onBoss()) autoRefresh(now);
     scheduleProbe();
   }
-
   const autoRefreshOn = () => { try { return localStorage.getItem('mdbc:auto') !== '0'; } catch (e) { return true; } };
   function autoRefresh(now) {
     if (now - lastAuto < 15000) return;
     if (now - lastAuto > 5 * MIN) autoCount = 0;
-    if (autoCount >= 3) return;                                  // 避免一直按
+    if (autoCount >= 3) return;
     const btn = [...document.querySelectorAll('button')].find(b => b.textContent.trim() === '刷新' && !b.disabled);
     if (!btn) return;
     lastAuto = now; autoCount++;
-    setTimeout(() => btn.click(), 1500);                          // 多等 1.5 秒，避免比伺服器早
+    setTimeout(() => btn.click(), 1500);
   }
-
   const esc = s => String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
-
   document.addEventListener('click', e => {
     if (!e.target.closest || !e.target.closest('[data-mdbc-tg]')) return;
     e.preventDefault(); e.stopPropagation();
-    try { localStorage.setItem('mdbc:auto', autoRefreshOn() ? '0' : '1'); } catch (err) { /* ignore */ }
+    try { localStorage.setItem('mdbc:auto', autoRefreshOn() ? '0' : '1'); } catch (err) {  }
     render();
   }, true);
-
+  tk.onToggle(on => {
+    if (on) { render(); return; }
+    clearTimeout(probeTimer); probeTimer = null;
+    document.querySelectorAll('[data-mdbc]').forEach(el => { delete el.dataset.mdbc; el.style.removeProperty('--mdbc-fs'); el.querySelectorAll(':scope > .mdbc').forEach(x => x.remove()); });
+  });
   setInterval(render, 1000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) render(); });
   const mo = new MutationObserver(() => { if (!render.q) { render.q = 1; requestAnimationFrame(() => { render.q = 0; render(); }); } });
@@ -1903,19 +1738,17 @@
   if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
 })();
 } }),
-    Object.assign({"id": "finder", "icon": "🔎", "name": "角色查詢", "desc": "玩家列表與「選擇助戰」裡，依角色和等級查出誰在用。", "feats": ["玩家列表：掃描全部玩家後依角色、關鍵字篩選，點暱稱進玩家頁", "選擇助戰：掃描可借名單，顯示等級、樓層與九項能力值，一鍵「帶入」搜尋", "Lv 最低～最高篩選；角色標籤人數跟著等級範圍變", "只有按「掃描」才讀資料，結果存在本機"], "ver": "1.1.0", "at": "idle"}, { run: function () {
-// ===== 角色查詢 1.1.0（mydoujin_角色查詢.user.js）=====
+    Object.assign({"id": "finder", "icon": "🔎", "name": "角色查詢", "desc": "玩家列表與「選擇助戰」裡，依角色和等級查出誰在用。", "feats": ["玩家列表：掃描全部玩家後依角色、關鍵字篩選，點暱稱進玩家頁", "選擇助戰：掃描可借名單，顯示等級、樓層與九項能力值，一鍵「帶入」搜尋", "Lv 最低～最高篩選；角色標籤人數跟著等級範圍變", "只有按「掃描」才讀資料，結果存在本機"], "ver": "1.1.1", "at": "idle"}, { run: function (TK) {
+// ===== 角色查詢 1.1.1（mydoujin_角色查詢.user.js）=====
 (function () {
   'use strict';
-
+  const tk = (typeof TK === 'object' && TK) || { on: true, onToggle() {} };
   const API = 'https://mydoujin-backend.onrender.com';
-  const P_KEY = 'mdcf:players';          // 玩家列表掃描結果（localStorage）
-  const A_KEY = 'mdcf:assist';           // 助戰名單掃描結果（sessionStorage，依樓層區間）
-  const P_FRESH = 30 * 60 * 1000;        // 玩家列表 30 分鐘內算新
-  const A_FRESH = 3 * 60 * 1000;         // 助戰名單 3 分鐘內算新
+  const P_KEY = 'mdcf:players';
+  const A_KEY = 'mdcf:assist';
+  const P_FRESH = 30 * 60 * 1000;
+  const A_FRESH = 3 * 60 * 1000;
   const SHOW_MAX = 200;
-
-  /* ---------- 小工具 ---------- */
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const ago = t => {
@@ -1929,7 +1762,6 @@
     get(store, k) { try { return JSON.parse(store.getItem(k) || 'null'); } catch (e) { return null; } },
     set(store, k, v) { try { store.setItem(k, JSON.stringify(v)); } catch (e) {} },
   };
-
   async function api(path) {
     const tok = localStorage.getItem('token');
     if (!tok) throw new Error('請先登入遊戲');
@@ -1947,13 +1779,11 @@
     }
     throw new Error('伺服器忙碌，請稍後再試');
   }
-
-  /* ---------- 資料：玩家列表（全部玩家） ---------- */
   const slimP = p => ({
     id: p.id, nick: p.nickname || '', lv: p.level, ch: p.characterName || '', ti: p.characterTitle || '',
     img: p.imagePath || '', fl: p.floor, hf: p.highestFloor, dead: !!p.isDead,
   });
-  let pScan = null; // 進行中的掃描
+  let pScan = null;
   function scanPlayers(onProg) {
     if (pScan) return pScan;
     pScan = (async () => {
@@ -1963,7 +1793,6 @@
       const pages = { 1: first.players || [] };
       let done = 1; onProg && onProg(done, total);
       const todo = []; for (let p = 2; p <= total; p++) todo.push(p);
-      // 一次最多 2 個請求、每個之間稍微停一下，不要對伺服器灌請求
       const worker = async () => {
         while (todo.length) {
           const p = todo.shift();
@@ -1982,8 +1811,6 @@
     })().finally(() => { pScan = null; });
     return pScan;
   }
-
-  /* ---------- 資料：助戰名單（同樓層區間） ---------- */
   const slimA = c => {
     const ch = c.character || {};
     return {
@@ -2016,8 +1843,6 @@
   }
   const rangeKey = r => r ? r[0] + '-' + (r[1] == null ? '' : r[1]) : '?';
   const rangeTxt = r => !r ? '' : r[1] == null ? `${r[0]} 樓以上` : `${r[0]}～${r[1]} 樓`;
-
-  /* ---------- 樣式 ---------- */
   const CSS = `
   :host { all: initial; display: block; }
   * { box-sizing: border-box; }
@@ -2070,25 +1895,19 @@
   input.lvin { flex: 0 0 64px; width: 64px; text-align: center; }
   .lvw { display: inline-flex; align-items: center; gap: 4px; color: #8b98ad; font-size: 12.5px; }
   .empty { padding: 14px; color: #8b98ad; text-align: center; font-size: 13px; }
-  .more { padding: 6px; text-align: center; color: #8b98ad; font-size: 12px; border-top: 1px solid #232b3a; }
   @media (max-width: 640px) {
     .lvw { flex: 1 1 100%; }
     .meta { margin-left: 0; width: 100%; }
     select { max-width: none; }
     .list { max-height: 60vh; }
   }`;
-
   const STAT_ORDER = [['hp', 'HP'], ['atk', '攻'], ['def', '防'], ['sta', '體'], ['agi', '敏'], ['spd', '反'], ['tec', '技'], ['int', '智'], ['luk', '幸']];
-
-  /* ---------- 共用元件 ---------- */
   function makeHost(kind) {
     const host = document.createElement('div');
     host.setAttribute('data-mdcf', kind);
     const root = host.attachShadow({ mode: 'open' });
     return { host, root };
   }
-
-  // 依角色統計：[{ch, n, img}]，人數多的在前
   function countByChar(list) {
     const m = new Map();
     list.forEach(x => {
@@ -2098,8 +1917,6 @@
     });
     return [...m.values()].sort((a, b) => b.n - a.n || a.ch.localeCompare(b.ch, 'zh-Hant'));
   }
-
-  // 等級範圍：空白＝不限；上下限填反了自動對調
   function lvRange(ui) {
     let lo = parseInt(ui.lo, 10), hi = parseInt(ui.hi, 10);
     lo = Number.isFinite(lo) ? lo : null; hi = Number.isFinite(hi) ? hi : null;
@@ -2113,10 +1930,7 @@
     return list.filter(x => (!r || lvOk(x, r)) && (!ch || x.ch === ch) &&
       (!kw || x.ch.toLowerCase().includes(kw) || x.ti.toLowerCase().includes(kw) || x.nick.toLowerCase().includes(kw)));
   }
-
-  /* ---------- 玩家列表頁 ---------- */
   const pUI = { open: ls.get(localStorage, 'mdcf:pOpen') !== false, ch: '', kw: '', lo: '', hi: '', busy: false, prog: null, err: '' };
-
   function mountPlayers() {
     if (location.pathname !== '/players') return;
     const h2 = [...document.querySelectorAll('h2')].find(e => e.textContent.trim() === '玩家列表');
@@ -2136,7 +1950,6 @@
     });
     renderPlayers(root);
   }
-
   function renderPlayers(root) {
     const data = ls.get(localStorage, P_KEY);
     const list = data ? data.list : [];
@@ -2163,7 +1976,6 @@
     root.innerHTML = h;
     if (pUI.open) renderPlayersList(root);
   }
-
   function renderPlayersList(root) {
     const el = root.getElementById('res');
     if (!el) return;
@@ -2190,7 +2002,6 @@
         </div>`).join('')}</div>` : `<div class="list"><div class="empty">沒有符合的玩家</div></div>`);
     el.innerHTML = h;
   }
-
   async function onPlayersClick(e, root) {
     const chip = e.target.closest('[data-ch]');
     if (chip) { pUI.ch = chip.dataset.ch; pUI.kw = ''; renderPlayers(root); return; }
@@ -2205,10 +2016,7 @@
       document.querySelectorAll('[data-mdcf="players"]').forEach(h => renderPlayers(h.shadowRoot));
     }
   }
-
-  /* ---------- Boss 頁：選擇助戰 ---------- */
   const aUI = { ch: '', kw: '', lo: '', hi: '', busy: false, prog: 0, err: '', note: '' };
-
   function findAssistForm() {
     const inp = document.querySelector('input[placeholder^="搜尋暱稱（需完全相符）"]');
     return inp ? { inp, form: inp.closest('form') } : null;
@@ -2218,7 +2026,6 @@
     const m = t.match(/選擇助戰（(\d+)(?:～(\d+)|\s*樓以上)/);
     return m ? [+m[1], m[2] ? +m[2] : null] : null;
   }
-
   function mountAssist() {
     const f = findAssistForm();
     if (!f || !f.form) return;
@@ -2238,13 +2045,11 @@
     aUI.note = '';
     renderAssist(root);
   }
-
   function assistData(root) {
     const range = boxRange(root.host.parentElement && root.host.parentElement.querySelector('form') || root.host.previousElementSibling);
     const all = ls.get(sessionStorage, A_KEY) || {};
     return { range, data: all[rangeKey(range)] || null };
   }
-
   function renderAssist(root) {
     const { range, data } = assistData(root);
     const list = data ? data.list : [];
@@ -2268,7 +2073,6 @@
     root.innerHTML = h;
     renderAssistList(root);
   }
-
   function renderAssistList(root) {
     const el = root.getElementById('res');
     if (!el) return;
@@ -2296,8 +2100,6 @@
           <button class="act" data-act="pick" data-nick="${esc(x.nick)}">帶入</button>
         </div>`).join('')}</div>` : `<div class="list"><div class="empty">沒有符合的玩家</div></div>`);
   }
-
-  // 把暱稱填進遊戲自己的搜尋框並送出（遊戲會只列出這個人，再由玩家自己按「選擇」）
   async function fillGameSearch(nick) {
     const f = findAssistForm();
     if (!f) return false;
@@ -2310,7 +2112,6 @@
     else if (f.form.requestSubmit) f.form.requestSubmit();
     return true;
   }
-
   async function onAssistClick(e, root) {
     const chip = e.target.closest('[data-ch]');
     if (chip) { aUI.ch = chip.dataset.ch; aUI.kw = ''; renderAssist(root); return; }
@@ -2327,31 +2128,37 @@
       if (await fillGameSearch(nick)) { aUI.note = `已帶入「${nick}」，請在下方遊戲名單按「選擇」。`; renderAssist(root); }
     }
   }
-
-  /* ---------- 掛載（SPA 換頁時持續檢查） ---------- */
   let tick = 0;
-  const check = () => { try { mountPlayers(); mountAssist(); } catch (e) {} };
+  const check = () => { if (!tk.on) return; try { mountPlayers(); mountAssist(); } catch (e) {} };
+  tk.onToggle(on => { if (on) check(); else document.querySelectorAll('[data-mdcf]').forEach(e => e.remove()); });
   new MutationObserver(() => { if (!tick) tick = requestAnimationFrame(() => { tick = 0; check(); }); })
     .observe(document, { childList: true, subtree: true });
   check();
 })();
 } }),
   ];
-
-  /* ---------- 依開關啟動各功能 ---------- */
   const offAtLoad = readOff();
-  const status = {};   // id → 'on' | 'off' | 'err'
+  const status = {};
+  const ctxs = {};
   for (const m of MODS) {
-    if (offAtLoad.includes(m.id)) { status[m.id] = 'off'; continue; }
+    const subs = [];
+    const ctx = ctxs[m.id] = { on: !offAtLoad.includes(m.id), onToggle(fn) { subs.push(fn); }, _subs: subs };
     const go = () => {
-      try { m.run(); status[m.id] = 'on'; }
+      try { m.run(ctx); status[m.id] = 'ok'; }
       catch (e) { status[m.id] = 'err'; console.error('[我的同人工具箱] ' + m.name + ' 啟動失敗', e); }
     };
-    if (m.at === 'idle' && document.readyState === 'loading') { status[m.id] = 'on'; document.addEventListener('DOMContentLoaded', go, { once: true }); }
+    if (m.at === 'idle' && document.readyState === 'loading') { status[m.id] = 'ok'; document.addEventListener('DOMContentLoaded', go, { once: true }); }
     else go();
   }
-
-  /* ---------- 🧰 按鈕與功能面板 ---------- */
+  function setOn(id, on) {
+    const ctx = ctxs[id];
+    if (!ctx || ctx.on === on) return;
+    ctx.on = on;
+    const off = readOff().filter(x => x !== id);
+    if (!on) off.push(id);
+    writeOff(off);
+    ctx._subs.forEach(fn => { try { fn(on); } catch (e) { console.error('[我的同人工具箱] 切換失敗', id, e); } });
+  }
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const CSS = `
     :host { all: initial; }
@@ -2362,8 +2169,6 @@
       box-shadow: 0 4px 14px rgba(0,0,0,.45); transition: opacity .15s, transform .15s; }
     .fab img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; pointer-events: none; }
     .fab:hover, .fab.open { opacity: 1; transform: scale(1.08); }
-    .fab .dot { position: absolute; top: -2px; right: -2px; width: 11px; height: 11px; border-radius: 50%; background: #f6ad55; border: 2px solid #171c27; display: none; }
-    .fab.pend .dot { display: block; }
     .pan { position: fixed; left: 14px; bottom: calc(68px + env(safe-area-inset-bottom)); z-index: 2147483001; width: 360px;
       max-width: calc(100vw - 28px); max-height: calc(100vh - 90px); overflow: auto; background: #1a1f2e; color: #e2e8f0;
       border: 1px solid #2d3748; border-radius: 12px; box-shadow: 0 12px 34px rgba(0,0,0,.55); font-size: 13px; display: none; }
@@ -2378,7 +2183,7 @@
     .nm { font-weight: bold; font-size: 14px; } .ver { color: #718096; font-size: 11px; }
     .st { font-size: 11px; padding: 1px 7px; border-radius: 9px; margin-left: 2px; white-space: nowrap; }
     .st.on { background: #1c4532; color: #9ae6b4; } .st.off { background: #2d3748; color: #a0aec0; }
-    .st.pend { background: #744210; color: #fbd38d; } .st.err { background: #63171b; color: #feb2b2; }
+    .st.err { background: #63171b; color: #feb2b2; }
     .sw { margin-left: auto; position: relative; width: 40px; height: 22px; flex: none; cursor: pointer; }
     .sw input { opacity: 0; width: 0; height: 0; position: absolute; }
     .sw span { position: absolute; inset: 0; border-radius: 11px; background: #4a5568; transition: background .15s; }
@@ -2390,11 +2195,10 @@
     .ft { padding: 10px 14px 14px; color: #a0aec0; font-size: 12px; line-height: 1.6; border-top: 1px solid #2d3748; }
     .ft .acts { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
     .btn { border: 1px solid #2d3748; background: #2d3748; color: #e2e8f0; padding: 5px 12px; border-radius: 7px; cursor: pointer; font-size: 12px; }
-    .btn.hi { background: #dd6b20; border-color: #dd6b20; color: #fff; font-weight: bold; }
     .btn[disabled] { opacity: .45; cursor: default; }
   `;
-
   let root, pan, fab;
+  const openFeats = new Set();
   function build() {
     if (root) return;
     const host = document.createElement('div');
@@ -2402,7 +2206,7 @@
     document.documentElement.appendChild(host);
     root = host.attachShadow({ mode: 'open' });
     root.innerHTML = `<style>${CSS}</style>
-      <button class="fab" title="我的同人工具箱：查看功能、開關"><img src="${ICON}" alt="工具箱"><i class="dot"></i></button>
+      <button class="fab" title="我的同人工具箱：查看功能、開關"><img src="${ICON}" alt="工具箱"></button>
       <div class="pan" role="dialog" aria-label="我的同人工具箱"></div>`;
     fab = root.querySelector('.fab');
     pan = root.querySelector('.pan');
@@ -2410,55 +2214,47 @@
     pan.addEventListener('change', e => {
       const id = e.target.dataset && e.target.dataset.id;
       if (!id) return;
-      const off = readOff().filter(x => x !== id);
-      if (!e.target.checked) off.push(id);
-      writeOff(off);
+      setOn(id, e.target.checked);
       paint();
     });
+    pan.addEventListener('toggle', e => {
+      const d = e.target;
+      if (d.dataset && d.dataset.id) { if (d.open) openFeats.add(d.dataset.id); else openFeats.delete(d.dataset.id); }
+    }, true);
     pan.addEventListener('click', e => {
       const a = e.target.closest('[data-act]');
       if (!a) return;
       if (a.dataset.act === 'close') toggle(false);
-      if (a.dataset.act === 'reload') location.reload();
-      if (a.dataset.act === 'all') { writeOff([]); paint(); }
+      if (a.dataset.act === 'all') { MODS.forEach(m => setOn(m.id, true)); paint(); }
     });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') toggle(false); });
     document.addEventListener('pointerdown', e => { if (pan.classList.contains('show') && !e.composedPath().includes(host)) toggle(false); }, true);
     paint();
   }
-
   function toggle(force) {
     const show = force === undefined ? !pan.classList.contains('show') : force;
     pan.classList.toggle('show', show);
     fab.classList.toggle('open', show);
     if (show) paint();
   }
-
   function paint() {
-    const off = readOff();
-    let pending = 0;
     const cards = MODS.map(m => {
-      const want = !off.includes(m.id), now = status[m.id];
-      const changed = want !== (now === 'on' || now === 'err');
-      if (changed) pending++;
-      const st = changed ? `<span class="st pend">重新整理後${want ? '開啟' : '關閉'}</span>`
-        : now === 'err' ? '<span class="st err">啟動失敗</span>'
-        : now === 'on' ? '<span class="st on">執行中</span>' : '<span class="st off">已關閉</span>';
-      return `<div class="card${want ? '' : ' off'}">
+      const on = ctxs[m.id].on;
+      const st = status[m.id] === 'err' ? '<span class="st err">啟動失敗</span>'
+        : on ? '<span class="st on">開啟</span>' : '<span class="st off">關閉</span>';
+      return `<div class="card${on ? '' : ' off'}">
         <div class="row"><span class="ic">${m.icon}</span><span class="nm">${esc(m.name)}</span><span class="ver">v${esc(m.ver)}</span>${st}
-          <label class="sw" title="${want ? '關閉' : '開啟'}「${esc(m.name)}」"><input type="checkbox" data-id="${m.id}" ${want ? 'checked' : ''}><span></span></label></div>
+          <label class="sw" title="${on ? '關閉' : '開啟'}「${esc(m.name)}」"><input type="checkbox" data-id="${m.id}" ${on ? 'checked' : ''}><span></span></label></div>
         <div class="ds">${esc(m.desc)}</div>
-        <details><summary>全部功能（${m.feats.length}）</summary><ul>${m.feats.map(f => `<li>${esc(f)}</li>`).join('')}</ul></details>
+        <details data-id="${m.id}"${openFeats.has(m.id) ? ' open' : ''}><summary>全部功能（${m.feats.length}）</summary><ul>${m.feats.map(f => `<li>${esc(f)}</li>`).join('')}</ul></details>
       </div>`;
     }).join('');
+    const anyOff = MODS.some(m => !ctxs[m.id].on);
     pan.innerHTML = `<div class="hd"><img src="${ICON}" alt=""><b>我的同人工具箱</b><small>v${esc(TK_VER)}</small><button class="x" data-act="close" title="關閉">✕</button></div>
       ${cards}
-      <div class="ft">開關存在這個瀏覽器裡；切換後要<b>重新整理頁面</b>才會生效。
-        <div class="acts"><button class="btn${pending ? ' hi' : ''}" data-act="reload" ${pending ? '' : 'disabled'}>⟳ 重新整理套用${pending ? `（${pending}）` : ''}</button>
-        <button class="btn" data-act="all" ${off.length ? '' : 'disabled'}>全部開啟</button></div></div>`;
-    fab.classList.toggle('pend', pending > 0);
+      <div class="ft">開關<b>立即生效</b>，不用重新整理；設定存在這個瀏覽器裡。
+        <div class="acts"><button class="btn" data-act="all" ${anyOff ? '' : 'disabled'}>全部開啟</button></div></div>`;
   }
-
   if (document.body) build();
   else document.addEventListener('DOMContentLoaded', build, { once: true });
 })();

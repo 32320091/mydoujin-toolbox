@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         我的同人｜工具箱
 // @namespace    mydoujin-toolbox
-// @version      1.1.1
-// @description  戰報統計、戰報逐行播放、Boss 冷卻倒數、角色查詢整合成一個插件；左下角圖示按鈕可查看所有功能並個別開關（立即生效）
+// @version      1.1.3
+// @description  戰報統計、戰報逐行播放、Boss 冷卻倒數、角色查詢整合成一個插件；左下角圖示按鈕可個別開關各功能（立即生效）
 // @match        https://mydoujin.online/*
 // @run-at       document-start
 // @grant        none
@@ -12,14 +12,14 @@
 (function () {
   'use strict';
   if (window.__mdToolbox) return;
-  const TK_VER = "1.1.1";
+  const TK_VER = "1.1.3";
   window.__mdToolbox = TK_VER;
   const ICON = "data:image/webp;base64,UklGRrYOAABXRUJQVlA4WAoAAAAQAAAATwAATwAAQUxQSK4EAAABoHbbtilJHtG+iMyybbRt27Zt27Ztu7+VbbZt2zYSce85+0O8F/EybkTEBKAjjS/hQQZmR04xFukarD4GQPeXGXMCL4ZPx5jmF9tnHzMMz1ch3CklizHfkPz85g8pWcr/1oRLx2GLKLHMaoXfLQObjsdujKRErebDgTAp7V5RdeSrXevAelPcPgUshu0o41F8Es4CA4+cUNye9WYcMPaaD8nidqsv64H1Hv2HDLEoh60pWsvC4owHln3wfzIKWdw6LazphWZTjPHAkCt/p0YlO2Ltf2sRftTHFuKAHmd/QkZlZgf8V4tqy54o1WS8QZdjPiCDMrcoi1V+r4XK37dACTDG5BgPuN2fJ6OwyqIMBn5IqYHCn7eABQDjvAUc0P3AJWQQVl3cgA9qY+Qf+7pSp169DADn0PPk10mNrLEw0+UVxpqojM+99NkPP869escRwMGfkEFYc2EWC4ugKnO/nDqVjJEFFgWHBQwFkCKqKiGSFGGhHTC5oHwJUVlXHvd0UAd2wF0N50zGhmKxjWpDMRjxP7WRAE2vUxqKxfTG4nFCizBJU5DDNm3UJATeFmFM308ZmaJqD8C4mozHPYxMUsIbN64EWFuDx8ExaBLCp8nWcZsCriqLDf9UZYoif6wYA9n+5IrwJs/aPm8xMsnIa0EyCn/ZFy7P4ywGJqn6Qz9DkhoYL4I3GcZ0+UgljcDb4CpIjbwUPsNhLwqTFPl3VTjJoAYeCZ81jiGNwIeNQw5VWreCA6wZ/aNKGgxrw0I0i5Hv9TIGHkczMkll22gYUHIYeRecMc1vUJJZBgavUXI0tm2KJuxDYTJjYbBVS9AsRk6AL81mSKZ9GRjgboYc1f9XMeu3iKZlBn7KkMXI23EnA5NpGQPrHNb4jjFL9O3RP6im07qcA+CwxV8MGcq/n4tMVvlvX/RdD/DY/GuGisSVP+35yDstABzGLqBIhiREKkkFAI+ut5OxInENkgELHPE7G2SGKZUwZEK7NArrAKywwWZvUBqDB5a5YtH3DGU2RGsw/Ma/SIqyMQJHfE7GKFohMb0BT5FBmS2kJvcOozC3zFdvZvqRuVrmuyPwESUhlaDtmiVlcuEwmL00aiISg7JSJYqS/PnGZliHu1hOQ0nq5+N3e+1/JSnl189bAXAwtvubDCkIP3joxE2HAX7U9vuecsQ2KzYBzhprLFb4hKH+Aqd1BgDnkO+9BwBrMXIeo9aZ8LuR8N5bAMY675yxDug2bPnOsBadblVqXan8ty2aUL0DRt/w2qc/Prsamhywzx+qdaX/XWBhq3IYcsUfrPx0BLquecITf7OuKmf2gcszJez2KRmiaJmv3vXK30ww8IUhsDkOB7WzrKxUkoyxbkRyWOZL/eEyHI5tlchcCVFZrxpIzWHg0i7GAHDYOqow0Z9+YcxhmU94bwBTeomRKSrfOGOlzf9jzGHgJfDwOJrCNPStdYEdvmPQLIpsC2OantGQBpXtl5WwzHNk0IzIdwY4rPaXaiIU4cQ+6Hf7r2QMSjLwSo8TGZisBi4dDqx8578ko6jKW8bMYEyHDHx7DQDLXDD3Z5LCxWj+mJISA3/Z2ZUArHrCuM/bXl4fVlA4IOIJAACQKQCdASpQAFAAPj0YiUMiIaEYWnaoIAPEtgBlc4ADJ+A8zauv4HerSjwq/z5vUfM7+zP7Ae9b+IHvC9AD+gf47rIvQA/ZL04PZD/dP0ls0Y/gH4Z+BX9o8FfE57Kzgsg9aT79/quLHeP/znuYPBZAJ+f/1P/Ucbv129Fn9C/0v5i83N4b7AH8f/qX/M9lv+n/5v3Te4/83/vX/K/w35CfYL/JP6D/sf8B/jP/H/nf/////uy9g/7c+x1+qrn/+Yi+j9IAEQTIxcYcpAnyj1/bej6ZMGi0BcQAI27t71VhY8t1VAUfI9o+EX5e0yPe5/D518e+FtktAhyvMkULZ3KAMqR9S9v19XZUXgNqeHFTxQY5NOsDnRlhQPRYS7jspDvSs81pihJ8cv1K+LPLtF+B7ff/yd59syTQcahYCiPsXjN4/kJNUfDy7HFh7V3aWJzOiIxDwAD+/2AeF2cdyJ+mulI1MrT1GnHmxcVdbkybFZrKimMS2ijG76cCKNypfCBa6pey6FPxqCC4By7Rxst/1AM8YV58C4uASo9XodRt4f4rwVKtGubpSlEe2MMy7YHfD/SfzaZ/bu98VZ68OAPzZPgsX8cDGEjw2saafQPgM+9X/e6aeBhAF5Aw/PoihnCnDw+w79vllaoe8vLXH3j54lGG3tvLdxeUBtkVjGED+dYXhuV++kf3Q6oX/wrEyT7AqDvUcZYQCNrCGp0wx87QP9QmhpdUXFkgnMYFJTNd7XqXv9YuBlyWOf/SWXb113/YwhdxZCLe/SD+Ow8n+bhoW9hWNcsq/9vgTYahTWSEAmM//NsUtTvMendPZpIm9E65K0iJWn7KkvsdRTQ+EWNVWmfVA6pk/TcXcQP1FSoXydiWI2G7/usv8/1fuvrVwJEb/8QHs0xhWM1INpbhxWYB7nfQ/M2xPBLawCziHT/ZAo1ptN+IUhF6ncXj9vqArvjIxW4bI4zwZgH7GvvjwHPBz7t7ccnyGRXdBb0Mwc1t9HkFQvUbtVU42DMtwZTAqgNIZhR2W8u1pUgHXV/az6rraiFBb5ua2e5TdgEecP8qerbvM/RophSUMQj2kNghRrNeDCCDu7hSXl9xWr8v7KYBMC2w+8xvGb5LwXIsJ1OlNX+MRF+aFBWydKmT6ORJHPIfRVNfgt9W0nwq5Bt2VpAOemZ+3nprwKdIpsPlVivBS/p0LdeZByaXe6xn9GY5pDj7DJUtYkT2hRHugOSXKdSF2kLOyw7I7rtJ/qxC02YUbXGBVJxlXv4o87Kf5jYDe3ydlGXbixvGGWN4FmoSAusGEoP3ZVd4BzpQKCyXwjFGSAA7AKdHu1w4HQ249tby48rtVoGm9beKGl/l1nQOtz7/0EVmLgqPwVtswbprYOYZEyo2vRHgrQIFFZe/Vua2fbBM8R7tJJIzd4jWlWZ4IjGupzy1o/Tb111zsCXz7l6Uhgl+w75A1aju0iO/ML6DuTzU2ivEcSzuGMSfwn5udlcqAVNF2km7mg9+4GmTPvJn9pZBL9m8UaIcP/Mp/IvsFJRYtZqvdbx7YdsQVb/a1JTMKiOAq/uV//EGUSwuUfzpT/SKv908Q2XMQxcccAENRR7FfJozJBmiy4qzbGp7X7P5gz+oyjqHxN6M2iWOVi86Q7l7teB0SwVybIda/bwmYAU6izbxYJs5yU3avT0S1iOFP+d7fNNnCmqhiqradR8rM3IKetAskgMgptCt3Kl6S2TGZ8RpDeMwOVmA7GFfiEls6+fuEfjLeIy4AXd/0BL+nEapfnFxvdqIhqJf/15xAMV992ZWn//y5dX5x35+Zro0IAVkOgW/8HP9E4H9cjrhuP74by+XOmSnwHokIM0vwvxpav+hDp0kQI2qSmeJWLlzCcGFDw1ANfzKrvL/ju1FAl04+ae41WdJ743Q9E32ns8idMVapcQe9ytJLdGb8naA8dHofv/l8CgI3pKZ5Xo52B5Vec/Z+3rcAxoBleINY5YRQqTFe6ygPpom5Ck171bLIMQaOUO7wzMEIgu/Gf5+YbXK+WQFdpOEU4dTkCgltRBK8O6ezxu6Cha1Ja7MPu2Oo6oo+83uLh/WBBBNq1C+2gdpKHpVFHEXoF3jaZxaNjX4aP2O2UpdvD7vD8JUBc3Nv8E9tcoJ2P6B4ciRT72fpjG03rwxedPk77d4AcT410TExwsUsZnPFrUQjCy+n/+l+w1z23mQXH3RugnP/uy21D59d1pdZN7a/VUhueiibHiLDrEpk+OleoiMfRz7BbKLirFe3UYek2LXS/ICI4xHinY6hBqKs4QiarQ2O8X8BUfjAaqOv0KIJvY230YyAUB793We1sSE2v9niSkMrXQPe8KlCpC899YlcAw54Um7YQJbo+1U55gbPLSBIU8xPLoVNeHvfLlVbyA3L0vrBivOLGIN+vfR5//sq0E5ybWZczaY4ecWKUFCwCGUHfF7/oY9jwclgD5y9TuS3Cl5GvwCLHez/uYfv3C4Lv5B/zhBJ+duo71Rry60yNMnvREQp8KrLumxEesmvsMt3m3k486ZDIp0y46JF1d/345Cumm+7AuExS51vNyD/byIpv3bpN/LTarhCKco9ZCZD+0lq+HcWRwZhIl559tJPT8qrH/yHHk/uGrWkzWH+YC3+EB3/+PuQ4KsqM6F/7r/N0G7ZMYLggOIOg/JU7beo+VymRYodgQvPYKg9Hh0keUKZqN27sX0sC7598Itf4yGNZRIy4Y+JqV63cO/u8R00osrtSWLgUpVHRgNW5sxpooZpzsdaf0reL17OMMWpHFjrYM6+vaBYqSOxkg2AhCHoAba2vy2setHFJ+gJVzx5g02gdyGeeJlQFoQiSKX6MkHBO7eQb59S/Fu2q5ZIkPE8iYqoHgXDxvEdA5wQ95kHOYlaEFzxIw9t17n5+D72dxkBJxv3hxBRf7mxs+polq9gcF8J3OFhFmEv0+WRVMfveoUVfNhYB9vXskkGIrhFvA27cPzdxhJbfphbaeLY19mFbVxGrdxXoVJ9g1XxLvSpJU0GZkFGIOvtPqCGjJ03WbvE4s5f4xZeUnBLCH+ImJzRElbfDQoUr4JgrNRiNZlgdqHwewaaK62rFuc2qs1ch7p0XtTWRbWoDQ0lgdCZJFW0VjgvVxzPoA++/TkWRZuHGTmXZUnm+WRUxBTK+u/ICskzOY2viS2Rig6sM4hw4eh1D4Ut+R84sJsXvMy60zc/w982gLjDmVARq/s7zPUXQ612R8nspXASXXq+s2uOvGNub/ekmz3tJBjY2LDZWa0OS2n9jclU5/cadtyFm82EJ+J3CGkPMBRX7ao7ksZZtuD3wTPouV24zdeFWTIJEZubnYwIRQQUeofXVhGdR2/6aYzbND2PLKbAAAA";
   const OFF_KEY = 'mdtk:off';
   const readOff = () => { try { const v = JSON.parse(localStorage.getItem(OFF_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } };
   const writeOff = v => { try { localStorage.setItem(OFF_KEY, JSON.stringify(v)); } catch (e) {  } };
   const MODS = [
-    Object.assign({"id": "stats", "icon": "📊", "name": "戰報統計", "desc": "戰報頁右下角的統計面板：傷害、承傷、回血、爆擊率、MVP。", "feats": ["玩家與 BOSS 的造成／幸運／總計傷害、承受傷害、回血、回 SP、爆擊率", "頂部摘要：我方總傷害、MVP、最佳坦克、最佳奶媽", "MVP 權重：輸出×1 > 補隊友×0.5 > 承傷×0.25 = 回SP×0.25 > 自回×0.1", "簡易／詳細切換；顯示全部／玩家／BOSS；⤢ 自動縮放成一個視窗", "燒掉的生命上限、特殊迴避、中毒／出血／凍傷等異常狀態與反傷", "西米專屬：番茄湯、臭臭茶、回收桶紀錄", "手機直拿自動改成底部抽屜＋角色卡片"], "ver": "1.20.1", "at": "start"}, { run: function (TK) {
+    Object.assign({"id": "stats", "icon": "📊", "name": "戰報統計", "desc": "戰報頁右下角的統計面板：傷害、承傷、回血、爆擊率、MVP。", "ver": "1.20.1", "at": "start"}, { run: function (TK) {
 // ===== 戰報統計 1.20.1（mydoujin_戰報統計.user.js）=====
 (function () {
   'use strict';
@@ -972,7 +972,7 @@
   tk.onToggle(() => { currentId = null; onRoute(); });
 })();
 } }),
-    Object.assign({"id": "playback", "icon": "▶️", "name": "戰報逐行播放", "desc": "Boss、切磋／茶渡、遭遇戰、戰報頁：戰鬥過程一行一行出現，最後才揭曉勝負。", "feats": ["逐行播放，可「跳過，直接看結果」、播完可重播", "播完前蓋住勝利／失敗／平手、死亡標記與死亡橫幅", "事件「遭遇戰鬥！」不先寫結果", "播放中戰報統計只顯示「⏳ 播放中」，不顯示總行數", "每一行後面顯示被打／被補的人剩多少血", "「⚙ 戰報播放」設定：逐行／直接顯示、剩餘血量、每行間隔、自動捲動"], "ver": "1.2.4", "at": "start"}, { run: function (TK) {
+    Object.assign({"id": "playback", "icon": "▶️", "name": "戰報逐行播放", "desc": "Boss、切磋／茶渡、遭遇戰、戰報頁：戰鬥過程一行一行出現，最後才揭曉勝負。", "ver": "1.2.4", "at": "start"}, { run: function (TK) {
 // ===== 戰報逐行播放 1.2.4（mydoujin_戰報播放.user.js）=====
 (function () {
   'use strict';
@@ -1511,7 +1511,7 @@
   });
 })();
 } }),
-    Object.assign({"id": "cooldown", "icon": "⏱️", "name": "Boss 冷卻倒數", "desc": "Boss 頁「還有 N 分鐘」改成每秒跳動的「還有 M 分 SS 秒」。", "feats": ["同場打的人用戰報時間＋30 分鐘，一進頁面就準到秒", "別場打的隊友在分鐘跳號時補查校正（每段冷卻最多 8 次）", "冷卻結束顯示「已結束 ✅」並自動按「刷新」（可點「⟳ 自動刷新」開關）"], "ver": "1.0.1", "at": "start"}, { run: function (TK) {
+    Object.assign({"id": "cooldown", "icon": "⏱️", "name": "Boss 冷卻倒數", "desc": "Boss 頁「還有 N 分鐘」改成每秒跳動的「還有 M 分 SS 秒」。", "ver": "1.0.1", "at": "start"}, { run: function (TK) {
 // ===== Boss 冷卻倒數 1.0.1（mydoujin_Boss冷卻倒數.user.js）=====
 (function () {
   'use strict';
@@ -1738,8 +1738,8 @@
   if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
 })();
 } }),
-    Object.assign({"id": "finder", "icon": "🔎", "name": "角色查詢", "desc": "玩家列表與「選擇助戰」裡，依角色和等級查出誰在用。", "feats": ["玩家列表：掃描全部玩家後依角色、關鍵字篩選，點暱稱進玩家頁", "選擇助戰：掃描可借名單，顯示等級、樓層與九項能力值，一鍵「帶入」搜尋", "Lv 最低～最高篩選；角色標籤人數跟著等級範圍變", "兩個區塊都可點標題列收起／展開（會記住）", "只有按「掃描」才讀資料，結果存在本機"], "ver": "1.2.0", "at": "idle"}, { run: function (TK) {
-// ===== 角色查詢 1.2.0（mydoujin_角色查詢.user.js）=====
+    Object.assign({"id": "finder", "icon": "🔎", "name": "角色查詢", "desc": "玩家列表與「選擇助戰」裡，依角色和等級查出誰在用。", "ver": "1.2.1", "at": "idle"}, { run: function (TK) {
+// ===== 角色查詢 1.2.1（mydoujin_角色查詢.user.js）=====
 (function () {
   'use strict';
   const tk = (typeof TK === 'object' && TK) || { on: true, onToggle() {} };
@@ -2016,7 +2016,7 @@
       document.querySelectorAll('[data-mdcf="players"]').forEach(h => renderPlayers(h.shadowRoot));
     }
   }
-  const aUI = { open: ls.get(localStorage, 'mdcf:aOpen') !== false, ch: '', kw: '', lo: '', hi: '', busy: false, prog: 0, err: '', note: '' };
+  const aUI = { open: ls.get(localStorage, 'mdcf:aOpen') !== false, ch: '', kw: '', lo: '100', hi: '', busy: false, prog: 0, err: '', note: '' };
   function findAssistForm() {
     const inp = document.querySelector('input[placeholder^="搜尋暱稱（需完全相符）"]');
     return inp ? { inp, form: inp.closest('form') } : null;
@@ -2193,15 +2193,12 @@
     .sw span::after { content: ''; position: absolute; left: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .15s; }
     .sw input:checked + span { background: #319795; } .sw input:checked + span::after { transform: translateX(18px); }
     .ds { color: #a0aec0; margin: 6px 0 0 32px; line-height: 1.5; }
-    details { margin: 6px 0 0 32px; } summary { cursor: pointer; color: #4FD1C5; font-size: 12px; user-select: none; }
-    ul { margin: 6px 0 0; padding-left: 18px; color: #cbd5e0; line-height: 1.6; } li { margin: 1px 0; }
     .ft { padding: 10px 14px 14px; color: #a0aec0; font-size: 12px; line-height: 1.6; border-top: 1px solid #2d3748; }
     .ft .acts { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
     .btn { border: 1px solid #2d3748; background: #2d3748; color: #e2e8f0; padding: 5px 12px; border-radius: 7px; cursor: pointer; font-size: 12px; }
     .btn[disabled] { opacity: .45; cursor: default; }
   `;
   let root, pan, fab;
-  const openFeats = new Set();
   function build() {
     if (root) return;
     const host = document.createElement('div');
@@ -2220,10 +2217,6 @@
       setOn(id, e.target.checked);
       paint();
     });
-    pan.addEventListener('toggle', e => {
-      const d = e.target;
-      if (d.dataset && d.dataset.id) { if (d.open) openFeats.add(d.dataset.id); else openFeats.delete(d.dataset.id); }
-    }, true);
     pan.addEventListener('click', e => {
       const a = e.target.closest('[data-act]');
       if (!a) return;
@@ -2249,7 +2242,6 @@
         <div class="row"><span class="ic">${m.icon}</span><span class="nm">${esc(m.name)}</span><span class="ver">v${esc(m.ver)}</span>${st}
           <label class="sw" title="${on ? '關閉' : '開啟'}「${esc(m.name)}」"><input type="checkbox" data-id="${m.id}" ${on ? 'checked' : ''}><span></span></label></div>
         <div class="ds">${esc(m.desc)}</div>
-        <details data-id="${m.id}"${openFeats.has(m.id) ? ' open' : ''}><summary>全部功能（${m.feats.length}）</summary><ul>${m.feats.map(f => `<li>${esc(f)}</li>`).join('')}</ul></details>
       </div>`;
     }).join('');
     const anyOff = MODS.some(m => !ctxs[m.id].on);

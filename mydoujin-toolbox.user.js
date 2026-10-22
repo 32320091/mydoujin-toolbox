@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         我的同人｜工具箱
 // @namespace    mydoujin-toolbox
-// @version      1.1.4
+// @version      1.1.5
 // @description  戰報統計、戰報逐行播放、Boss 冷卻倒數、角色查詢整合成一個插件；左下角圖示按鈕可個別開關各功能（立即生效）
 // @match        https://mydoujin.online/*
 // @run-at       document-start
@@ -12,15 +12,15 @@
 (function () {
   'use strict';
   if (window.__mdToolbox) return;
-  const TK_VER = "1.1.4";
+  const TK_VER = "1.1.5";
   window.__mdToolbox = TK_VER;
   const ICON = "data:image/webp;base64,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";
   const OFF_KEY = 'mdtk:off';
   const readOff = () => { try { const v = JSON.parse(localStorage.getItem(OFF_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } };
   const writeOff = v => { try { localStorage.setItem(OFF_KEY, JSON.stringify(v)); } catch (e) {  } };
   const MODS = [
-    Object.assign({"id": "stats", "icon": "📊", "name": "戰報統計", "desc": "戰報頁右下角的統計面板：傷害、承傷、回血、爆擊率、MVP。", "ver": "1.21.0", "at": "start"}, { run: function (TK) {
-// ===== 戰報統計 1.21.0（mydoujin_戰報統計.user.js）=====
+    Object.assign({"id": "stats", "icon": "📊", "name": "戰報統計", "desc": "戰報頁右下角的統計面板：傷害、承傷、回血、爆擊率、MVP。", "ver": "1.21.1", "at": "start"}, { run: function (TK) {
+// ===== 戰報統計 1.21.1（mydoujin_戰報統計.user.js）=====
 (function () {
   'use strict';
   const tk = (typeof TK === 'object' && TK) || { on: true, onToggle() {} };
@@ -134,6 +134,36 @@
   }
   const TEAM_HEAL_SKILLS = ['sylphy_healing', 'sylphy_chantless_healing', 'simmer_cook', 'simmer_recycle_bin'];
   const TEAM_HEAL_MSG = /治癒之鎖|治癒魔術|小黃金樹|緊急包紮|番茄湯/;
+  const KNOWN_SUMMONS = ['邪經文大僧正', '月蝕盡絕黑阿修羅', '魄啜繚亂弟切花魁', '殉國禁獄鬼軍曹'];
+  const PUNCT = /[，。！？、；：,.!?;:「」『』（）()—…]/;
+  const NAME_PATTERNS = [
+    /對\s+(.+?)\s+造成了/, /^\s*(.+?)\s+倒下了/, /^\s*(.+?)\s+身上/, /被\s+(.+?)\s+(?:用\S+)?(?:躲開|閃開|閃過|避開|抵擋)/,
+    /(?:砸向|撞向|斬向|捲到了旁邊的|衝向|往)\s+(.+?)(?:\s+身上|，|！|$)/,
+  ];
+  function summonName(l, logs) {
+    const msg = String(l.message || '').trim();
+    const known = KNOWN_SUMMONS.find(n => msg.includes(n));
+    if (known) return known;
+    const sid = l.targetId;
+    const rel = logs.filter(x => x && x !== l && x.type !== 'SUMMON' && (x.actorId === sid || x.targetId === sid));
+    const vote = new Map();
+    const add = (n, w, min = 2) => { n = String(n || '').trim(); if (n.length >= min && n.length <= 24 && !PUNCT.test(n)) vote.set(n, (vote.get(n) || 0) + w); };
+    rel.forEach(x => {
+      const m = String(x.message || '');
+      if (x.targetId === sid) NAME_PATTERNS.forEach(re => { const r = m.match(re); if (r) add(r[1], 3, 1); });
+      if (x.actorId === sid) { const r = m.match(/^\s*(\S+(?:\s+T-\d+)?)\s/); if (r) add(r[1], 1); }
+    });
+    if (!vote.size) rel.forEach(x => String(x.message || '').split(/\s+/).forEach(t => add(t.split(PUNCT)[0], 1)));
+    if (vote.size) {
+      const inMsg = n => msg.includes(n) ? 0.5 : 0;
+      return [...vote.entries()].sort((p, q) => (q[1] + inMsg(q[0])) - (p[1] + inMsg(p[0])) || p[0].length - q[0].length)[0][0];
+    }
+    const q = msg.match(/「([^」]{1,16})」/);
+    if (q) return q[1];
+    const toks = msg.split(/\s+/).filter(Boolean);
+    const pick = toks.length >= 3 ? toks[1] : (toks[0] || '');
+    return pick.split(PUNCT).filter(Boolean).pop() || '';
+  }
   function analyze(rep) {
     const P = rep.participants || {};
     const units = [];
@@ -150,8 +180,7 @@
     logs.forEach(l => {
       if (!l || l.type !== 'SUMMON' || !l.targetId) return;
       const owner = byId.get(l.actorId);
-      const mn = String(l.message || '').match(/^\s*(\S+?)\s/);
-      const nm = (mn && mn[1]) || ((owner ? owner.name : '') + '的分身') || String(l.targetId);
+      const nm = summonName(l, logs) || ((owner ? owner.name : '') + '的分身') || String(l.targetId);
       let u = byId.get(l.targetId);
       if (!u) { u = newUnit({ name: nm }, owner ? owner.side : 'C'); u.id = l.targetId; units.push(u); byId.set(l.targetId, u); }
       u.name = shortName(nm); u.full = nm; u.names = [nm];

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         我的同人｜工具箱
 // @namespace    mydoujin-toolbox
-// @version      1.5.0
+// @version      1.5.1
 // @description  戰報統計、戰報逐行播放、Boss 冷卻倒數、角色查詢、轉生頁整理（含首頁一鍵轉生）、首頁頭像整合成一個插件；左下角圖示按鈕可個別開關各功能（立即生效）
 // @match        https://mydoujin.online/*
 // @run-at       document-start
@@ -12,15 +12,15 @@
 (function () {
   'use strict';
   if (window.__mdToolbox) return;
-  const TK_VER = "1.5.0";
+  const TK_VER = "1.5.1";
   window.__mdToolbox = TK_VER;
   const ICON = "data:image/webp;base64,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";
   const OFF_KEY = 'mdtk:off';
   const readOff = () => { try { const v = JSON.parse(localStorage.getItem(OFF_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } };
   const writeOff = v => { try { localStorage.setItem(OFF_KEY, JSON.stringify(v)); } catch (e) {  } };
   const MODS = [
-    Object.assign({"id": "stats", "icon": "📊", "name": "戰報統計", "desc": "戰報頁右下角的統計面板：傷害、承傷、回血、爆擊率、MVP。", "ver": "1.23.0", "at": "start"}, { run: function (TK) {
-// ===== 戰報統計 1.23.0（mydoujin_戰報統計.user.js）=====
+    Object.assign({"id": "stats", "icon": "📊", "name": "戰報統計", "desc": "戰報頁右下角的統計面板：傷害、承傷、回血、爆擊率、MVP。", "ver": "1.24.0", "at": "start"}, { run: function (TK) {
+// ===== 戰報統計 1.24.0（mydoujin_戰報統計.user.js）=====
 (function () {
   'use strict';
   const tk = (typeof TK === 'object' && TK) || { on: true, onToggle() {} };
@@ -105,13 +105,13 @@
       mlevel: p.level != null ? p.level : null,
       dealt: { real: 0, shown: 0 },
       taken: { real: 0, shown: 0 },
-      byKind: { normal: { real: 0, shown: 0, n: 0 }, skill: { real: 0, shown: 0, n: 0 }, counter: { real: 0, shown: 0, n: 0 }, dot: { real: 0, shown: 0, n: 0 }, passive: { real: 0, shown: 0, n: 0 }, fart: { real: 0, shown: 0, n: 0 }, finale: { real: 0, shown: 0, n: 0 } },
+      byKind: { normal: { real: 0, shown: 0, n: 0 }, skill: { real: 0, shown: 0, n: 0 }, counter: { real: 0, shown: 0, n: 0 }, dot: { real: 0, shown: 0, n: 0 }, passive: { real: 0, shown: 0, n: 0 }, fart: { real: 0, shown: 0, n: 0 }, finale: { real: 0, shown: 0, n: 0 }, confuse: { real: 0, shown: 0, n: 0 } },
       simmer: null,
       luck: 0, luckN: 0, luckTaken: 0, luckTakenN: 0,
       heal: 0, healTeam: 0, healSolo: 0, selfHeal: {}, healRecv: 0, sp: 0, spRecv: 0,
       crit: 0, hitN: 0, blockedN: 0, maxHit: 0, missN: 0, dodgeN: 0,
       hpLeft: null, hpMax: null, dead: false, deathN: 0,
-      revN: 0, revBy: {}, revivedN: 0, finaleBy: {},
+      revN: 0, revBy: {}, revivedN: 0, finaleBy: {}, confuseBy: {},
       burn: 0, burnN: 0,
       attackedN: 0, specialN: 0, special: {},
       dot: {}, dotTaken: {},
@@ -218,6 +218,8 @@
     });
     const buffSrc = {};
     const applyLog = [];
+    const CONF_RE = /神魂顛倒|認錯敵我|顛倒了敵我|陷入混亂|混亂/;
+    const confBy = {};
     const prefixOwner = {};
     const lastDotSrc = {};
     let lastZoneEnd = '';
@@ -271,7 +273,7 @@
         const k = a.byKind[kind]; k.real += real; k.shown += shown; k.n++;
         if (CRITABLE[kind]) { a.hitN++; if (l.isCrit) a.crit++; }
         if (l.blocked || l.type === 'BLOCK') a.blockedN++;
-        if (kind !== 'finale' && shown > a.maxHit) a.maxHit = shown;
+        if (kind !== 'finale' && kind !== 'confuse' && shown > a.maxHit) a.maxHit = shown;
       }
       if (t) { t.taken.real += real; t.taken.shown += shown; if (CRITABLE[kind]) t.attackedN++; }
     };
@@ -316,11 +318,13 @@
         case 'BUFF_APPLY':
           if (a && t && a.side !== t.side) {
             (buffSrc[t.id] = buffSrc[t.id] || {})[l.buffId || ''] = a.id;
+            if (/confus/i.test(String(l.buffId || '') + String(l.skillId || '')) || l.skillId === 'sexy_jutsu' || CONF_RE.test(String(l.message || ''))) confBy[t.id] = a;
             applyLog.push({ victim: t.id, actor: a.id, msg: String(l.message || '') });
           }
           break;
         case 'BUFF_EFFECT': {
           const msg = String(l.message || '');
+          if (a && (/confus/i.test(String(l.buffId || '')) || /因混亂顛倒了敵我/.test(msg))) break;
           if (!a || !v) break;
           if (l.buffId === 'simmer_dish_tomato_soup' || (/番茄湯/.test(msg) && /恢復|回復/.test(msg))) {
             a.healRecv += v;
@@ -368,6 +372,13 @@
             const his = st.kind === 'passive' ? 'passiveTaken' : 'dotTaken';
             if (a) { const d = dotSlot(a[mine], st.name); d.dmg += real; d.n++; }
             if (t) { const dt = dotSlot(t[his], st.name); dt.dmg += real; dt.n++; }
+            break;
+          }
+          if (a && t && (a === t || a.side === t.side) && confBy[a.id] && confBy[a.id] !== a) {
+            const c = confBy[a.id];
+            hit(c, t, real, v, 'confuse', l);
+            const cb = (c.confuseBy[a.name + '→' + (a === t ? '自己' : t.name)] = c.confuseBy[a.name + '→' + (a === t ? '自己' : t.name)] || { dmg: 0, n: 0 });
+            cb.dmg += real; cb.n++;
             break;
           }
           const kind = l.isCounter ? 'counter' : (l.isNormalAttack ? 'normal' : 'skill');
@@ -594,6 +605,7 @@
   .tag.lgc { color: #90cdf4; border-color: #4299e1; background: rgba(66,153,225,.12); }
   .tag.soup { color: #feb2b2; border-color: #fc8181; }
   .tag.fart { color: #c6f6d5; border-color: #48bb78; background: rgba(72,187,120,.12); }
+  .tag.conf { color: #fed7e2; border-color: #d53f8c; background: rgba(213,63,140,.15); font-weight: 700; cursor: help; }
   .spl .ad { color: #feb2b2; }
   .spl .dotl b { color: #9ae6b4; }
   .spl .rst b { color: #7bd5a6; }
@@ -723,6 +735,7 @@
         ${k.dot.n ? item('異常狀態傷害', fmt(k.dot[mode]) + '（' + k.dot.n + ' 次）') : ''}
         ${k.passive.n ? item('反傷', fmt(k.passive[mode]) + '（' + k.passive.n + ' 次）') : ''}
         ${k.finale.n ? item('全劇終（對手剩餘血量）', fmt(k.finale[mode]), 'rev') : ''}
+        ${k.confuse.n ? item('混亂（對手打自己人）', fmt(k.confuse[mode]) + '（' + k.confuse.n + ' 下）', 'rev') : ''}
         ${k.fart.n ? item('臭臭茶放屁', fmt(k.fart[mode]) + '（' + k.fart.n + ' 次）', 'fart') : ''}
         ${item('爆擊率', critPct(u.crit, u.hitN) + '（' + u.crit + ' / ' + u.hitN + ' 次判定）')}
         ${u.luk != null ? item('幸運值', u.luk + (u.isSummon ? '（沿用本體，公式推估 ' : '（公式推估 ') + critTheory(u.luk) + '）') : ''}
@@ -830,6 +843,10 @@
       h += `<span class="tag rev" title="${esc('拉起來的隊友：\n' + ent.map(([n, c]) => `${n} ×${c}`).join('\n'))}">拉起 ${u.revN} 人次（${ent.length} 人）</span>`;
     }
     if (u.revivedN) h += `<span class="tag rvd">被拉起 ×${u.revivedN}</span>`;
+    if (u.byKind.confuse.n) {
+      const ent = Object.entries(u.confuseBy).sort((a, b) => b[1].dmg - a[1].dmg);
+      h += `<span class="tag conf" title="${esc('混亂：對手打到自己人／自己的傷害算給施放者\n' + ent.map(([n, x]) => `${n} ${fmt(x.dmg)}（${x.n} 下）`).join('\n'))}">混亂 +${fmt(u.byKind.confuse.real)}</span>`;
+    }
     if (u.byKind.finale.n) h += `<span class="tag fin" title="${esc('全劇終：對手剩下的血量全部算給這個角色\n' + Object.entries(u.finaleBy).map(([n, v]) => `${n} ${fmt(v)}`).join('\n'))}">全劇終 +${fmt(u.byKind.finale.real)}</span>`;
     return h;
   }

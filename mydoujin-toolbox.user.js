@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         我的同人｜工具箱
 // @namespace    mydoujin-toolbox
-// @version      1.5.1
-// @description  戰報統計、戰報逐行播放、Boss 冷卻倒數、角色查詢、轉生頁整理（含首頁一鍵轉生）、首頁頭像整合成一個插件；左下角圖示按鈕可個別開關各功能（立即生效）
+// @version      1.6.0
+// @description  戰報統計、戰報逐行播放、Boss 冷卻倒數、角色查詢、轉生頁整理（含首頁一鍵轉生）、首頁頭像（含自訂名稱、稱號、背景圖）整合成一個插件；左下角圖示按鈕可個別開關各功能（立即生效）
 // @match        https://mydoujin.online/*
 // @run-at       document-start
 // @grant        none
@@ -12,7 +12,7 @@
 (function () {
   'use strict';
   if (window.__mdToolbox) return;
-  const TK_VER = "1.5.1";
+  const TK_VER = "1.6.0";
   window.__mdToolbox = TK_VER;
   const ICON = "data:image/webp;base64,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";
   const OFF_KEY = 'mdtk:off';
@@ -2676,8 +2676,8 @@
   schedule();
 })();
 } }),
-    Object.assign({"id": "avatar", "icon": "🐱", "name": "首頁頭像", "desc": "首頁「我的角色」的頭像換成動圖：內建 4 張、可自己匯入，每次重新整理隨機挑一張（頭像右上角 ⚙ 設定；只改自己畫面上的顯示）。", "ver": "1.1.0", "at": "idle"}, { run: function (TK) {
-// ===== 首頁頭像 1.1.0（mydoujin_首頁頭像.user.js）=====
+    Object.assign({"id": "avatar", "icon": "🐱", "name": "首頁頭像", "desc": "首頁「我的角色」的頭像換成動圖：內建 4 張、可自己匯入，每次重新整理隨機挑一張；角色名稱、稱號、背景圖（可調透明度）都能自訂（頭像右上角 ⚙ 設定；只改自己畫面上的顯示）。", "ver": "1.3.0", "at": "idle"}, { run: function (TK) {
+// ===== 首頁頭像 1.3.0（mydoujin_首頁頭像.user.js）=====
 (function () {
   'use strict';
   const tk = (typeof TK === 'object' && TK) || { on: true, onToggle() {} };
@@ -2704,8 +2704,9 @@
  }
 ];
   const CFG_KEY = 'mdav:cfg';
+  const BG_ID = '__bg__';
   const MAX_BYTES = 20 * 1024 * 1024;
-  const loadCfg = () => { try { const v = JSON.parse(localStorage.getItem(CFG_KEY)); return v && Array.isArray(v.off) ? v : { off: [] }; } catch (e) { return { off: [] }; } };
+  const loadCfg = () => { let v = null; try { v = JSON.parse(localStorage.getItem(CFG_KEY)); } catch (e) {  } v = v && typeof v === 'object' ? v : {}; const bgT = Number(v.bgT); return { off: Array.isArray(v.off) ? v.off : [], name: String(v.name || ''), title: String(v.title || ''), bgT: Number.isFinite(bgT) ? Math.min(100, Math.max(0, bgT)) : 85, bgScope: v.bgScope === 'all' ? 'all' : 'home' }; };
   const saveCfg = c => { try { localStorage.setItem(CFG_KEY, JSON.stringify(c)); } catch (e) {  } };
   let cfg = loadCfg();
   let dbp = null;
@@ -2729,8 +2730,12 @@
   }
   const urls = new Map();
   let imported = [];
+  let bgUrl = null;
   async function loadImported() {
     try { imported = (await idb('readonly', s => s.getAll())) || []; } catch (e) { imported = []; }
+    const bg = imported.find(x => x.id === BG_ID);
+    imported = imported.filter(x => x.id !== BG_ID);
+    if (bg) bgUrl = URL.createObjectURL(bg.blob);
     imported.sort((a, b) => (a.at || 0) - (b.at || 0));
     imported.forEach(x => { if (!urls.has(x.id)) urls.set(x.id, URL.createObjectURL(x.blob)); });
   }
@@ -2759,8 +2764,53 @@
     const h = [...document.querySelectorAll('h2')].find(x => x.textContent.trim() === '我的角色');
     return h && h.parentElement && h.parentElement.querySelector('img:not(.mdav-skip)');
   }
+  const TEXT_ROWS = [['角色', 'name'], ['稱號', 'title']];
+  function valCell(label) {
+    const h = [...document.querySelectorAll('h2')].find(x => x.textContent.trim() === '我的角色');
+    const box = h && h.parentElement;
+    const td = box && [...box.querySelectorAll('td.label')].find(x => x.textContent.trim() === label);
+    return td && td.nextElementSibling;
+  }
+  function applyText() {
+    TEXT_ROWS.forEach(([label, key]) => {
+      const td = valCell(label);
+      if (!td) return;
+      const want = cfg[key].trim();
+      let node = [...td.childNodes].find(n => n.nodeType === 3);
+      if (!want) { restoreText(td); return; }
+      if (!node) { node = document.createTextNode(''); td.appendChild(node); }
+      if (node.nodeValue === want) return;
+      td.dataset.mdavText = node.nodeValue;
+      td.title = '原本：' + node.nodeValue;
+      node.nodeValue = want;
+    });
+  }
+  function restoreText(td) {
+    if (!td || td.dataset.mdavText == null) return;
+    const node = [...td.childNodes].find(n => n.nodeType === 3);
+    if (node) node.nodeValue = td.dataset.mdavText;
+    td.removeAttribute('data-mdav-text'); td.removeAttribute('title');
+  }
+  function applyBg() {
+    let el = document.getElementById('mdav-bgl');
+    const show = tk.on && bgUrl && (cfg.bgScope === 'all' || location.pathname === '/') && cfg.bgT < 100;
+    if (!show) { if (el) el.remove(); return; }
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'mdav-bgl';
+      el.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:2147482000;background:center/cover no-repeat;';
+      document.documentElement.appendChild(el);
+    }
+    const img = `url("${bgUrl}")`;
+    if (el.style.backgroundImage !== img) el.style.backgroundImage = img;
+    const op = String(Math.round(100 - cfg.bgT) / 100);
+    if (el.style.opacity !== op) el.style.opacity = op;
+  }
   function apply() {
-    if (!tk.on || !ready || location.pathname !== '/') return;
+    if (!tk.on || !ready) return;
+    applyBg();
+    if (location.pathname !== '/') return;
+    applyText();
     const img = findImg();
     if (!img) return;
     ensureStyle();
@@ -2771,7 +2821,7 @@
       g.type = 'button';
       g.className = 'mdav-gear';
       g.textContent = '⚙';
-      g.title = '首頁頭像：匯入圖片、選要輪播哪幾張';
+      g.title = '首頁自訂：頭像輪播、角色名稱與稱號、背景圖';
       g.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); openPanel(); });
       host.appendChild(g);
     }
@@ -2794,8 +2844,10 @@
   }
   function clear() {
     document.querySelectorAll('img[data-mdav]').forEach(restore);
+    document.querySelectorAll('[data-mdav-text]').forEach(restoreText);
     document.querySelectorAll('.mdav-gear').forEach(e => e.remove());
     document.querySelectorAll('[data-mdav-host]').forEach(e => e.removeAttribute('data-mdav-host'));
+    const bl = document.getElementById('mdav-bgl'); if (bl) bl.remove();
     closePanel();
   }
   let panelHost = null;
@@ -2820,7 +2872,16 @@
     .ft { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 0 14px 14px; }
     .btn { border: 1px solid #4fd1c5; background: #2c7a7b; color: #fff; padding: 6px 12px; border-radius: 7px; cursor: pointer; font-size: 13px; font-weight: bold; }
     .btn.g { background: #2d3748; border-color: #4a5568; }
-    .msg { color: #f6ad55; }`;
+    .msg { color: #f6ad55; }
+    .txt { display: grid; grid-template-columns: auto 1fr; gap: 8px 10px; align-items: center; padding: 12px 14px 0; }
+    .txt input { width: 100%; background: #10141d; color: #e2e8f0; border: 1px solid #4a5568; border-radius: 6px; padding: 6px 8px; font-size: 13px; }
+    .txt input:focus { outline: none; border-color: #4fd1c5; }
+    .sub { padding: 12px 14px 0; font-weight: bold; color: #cbd5e0; }
+    .bgb { display: flex; gap: 12px; align-items: flex-start; padding: 10px 14px 0; flex-wrap: wrap; }
+    .bgb .pv { width: 150px; aspect-ratio: 16/10; border-radius: 8px; border: 1px solid #2d3748; background: #000 center/cover no-repeat; display: flex; align-items: center; justify-content: center; color: #718096; font-size: 12px; }
+    .bgb .ctl { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 8px; }
+    .bgb input[type=range] { width: 100%; accent-color: #4fd1c5; }
+    .bgb select { background: #10141d; color: #e2e8f0; border: 1px solid #4a5568; border-radius: 6px; padding: 4px 6px; font-size: 13px; }`;
   let msg = '';
   function closePanel() { if (panelHost) { panelHost.remove(); panelHost = null; } }
   function openPanel() {
@@ -2830,6 +2891,11 @@
       const root = panelHost.attachShadow({ mode: 'open' });
       root.addEventListener('click', onPanelClick);
       root.addEventListener('change', onPanelChange);
+      root.addEventListener('input', e => {
+        if (!e.target.matches('[data-bgt]')) return;
+        cfg.bgT = Number(e.target.value); applyBg();
+        const v = panelHost.shadowRoot.querySelector('[data-bgtv]'); if (v) v.textContent = cfg.bgT + '%';
+      });
       document.documentElement.appendChild(panelHost);
     }
     msg = '';
@@ -2847,17 +2913,34 @@
       </div>`;
     }).join('');
     panelHost.shadowRoot.innerHTML = `<style>${PCSS}</style><div class="bg" data-close><div class="pn">
-      <div class="hd"><b>首頁頭像</b><button class="x" data-close>✕</button></div>
+      <div class="hd"><b>首頁自訂（頭像・名稱・背景）</b><button class="x" data-close>✕</button></div>
+      <div class="sub">自訂名稱與稱號</div>
+      <div class="txt"><span>角色名稱</span><input data-txt="name" maxlength="40" placeholder="留空＝遊戲原本的名稱" value="${esc(cfg.name)}">
+        <span>稱號</span><input data-txt="title" maxlength="40" placeholder="留空＝遊戲原本的稱號" value="${esc(cfg.title)}"></div>
+      <div class="sub">背景圖</div>
+      <div class="bgb"><div class="pv" ${bgUrl ? `style="background-image:url('${esc(bgUrl)}')"` : ''}>${bgUrl ? '' : '還沒有背景圖'}</div>
+        <div class="ctl">
+          <div class="row"><button class="btn" data-bgimport>${bgUrl ? '換一張背景圖' : '＋ 匯入背景圖'}</button>${bgUrl ? '<button class="btn g" data-bgdel>移除背景圖</button>' : ''}</div>
+          <label>透明度 <b data-bgtv>${cfg.bgT}%</b><span class="mu">（數字越大越透明，100% 等於不顯示）</span><input type="range" min="0" max="100" step="1" value="${cfg.bgT}" data-bgt></label>
+          <label>顯示在 <select data-scope><option value="home" ${cfg.bgScope === 'home' ? 'selected' : ''}>只有首頁</option><option value="all" ${cfg.bgScope === 'all' ? 'selected' : ''}>所有頁面</option></select></label>
+        </div><input type="file" accept="image/*" hidden data-bgfile></div>
+      <div class="sub">頭像</div>
       <div class="tip">每次重新整理頁面，從有勾「輪播」的圖片裡隨機挑一張。匯入的圖片只存在這個瀏覽器裡（GIF／APNG／WebP 動圖都可以，單張最大 20 MB）。外框亮起的是現在這張。</div>
       <div class="grid">${items}</div>
       <div class="ft"><button class="btn" data-import>＋ 匯入圖片（可多選）</button><button class="btn g" data-next>換一張</button>
-        <span class="msg">${esc(msg)}</span><input type="file" accept="image/*" multiple hidden></div>
+        <span class="msg">${esc(msg)}</span><input type="file" accept="image/*" multiple hidden data-avfile></div>
     </div></div>`;
   }
   async function onPanelClick(e) {
     const t = e.target;
     if (t.hasAttribute('data-close') && (t.classList.contains('x') || t === e.currentTarget.querySelector('.bg'))) { closePanel(); return; }
-    if (t.closest('[data-import]')) { panelHost.shadowRoot.querySelector('input[type=file]').click(); return; }
+    if (t.closest('[data-import]')) { panelHost.shadowRoot.querySelector('[data-avfile]').click(); return; }
+    if (t.closest('[data-bgimport]')) { panelHost.shadowRoot.querySelector('[data-bgfile]').click(); return; }
+    if (t.closest('[data-bgdel]')) {
+      try { await idb('readwrite', s => s.delete(BG_ID)); } catch (err) { msg = '移除失敗：' + err.message; paintPanel(); return; }
+      if (bgUrl) URL.revokeObjectURL(bgUrl);
+      bgUrl = null; applyBg(); msg = '已移除背景圖'; paintPanel(); return;
+    }
     if (t.closest('[data-next]')) { pick(current && current.id); apply(); msg = current ? `換成「${current.name}」` : '沒有勾任何一張'; paintPanel(); return; }
     const del = t.closest('[data-del]');
     if (del) {
@@ -2872,6 +2955,23 @@
   }
   async function onPanelChange(e) {
     const t = e.target;
+    if (t.matches('[data-txt]')) {
+      cfg[t.getAttribute('data-txt')] = t.value.trim(); saveCfg(cfg);
+      applyText();
+      msg = t.value.trim() ? '已套用' : '已恢復遊戲原本的文字';
+      const m = panelHost.shadowRoot.querySelector('.msg'); if (m) m.textContent = msg;
+      return;
+    }
+    if (t.matches('[data-bgt]')) { cfg.bgT = Number(t.value); saveCfg(cfg); applyBg(); return; }
+    if (t.matches('[data-scope]')) { cfg.bgScope = t.value === 'all' ? 'all' : 'home'; saveCfg(cfg); applyBg(); return; }
+    if (t.matches('[data-bgfile]')) {
+      const f = t.files && t.files[0];
+      if (!f) return;
+      if (!/^image\//.test(f.type) || f.size > MAX_BYTES) { msg = `無法當背景圖：${f.name}（不是圖片或超過 20 MB）`; paintPanel(); return; }
+      try { await idb('readwrite', s => s.put({ id: BG_ID, name: f.name, blob: f, at: Date.now() })); } catch (err) { msg = '儲存失敗：' + err.message; paintPanel(); return; }
+      if (bgUrl) URL.revokeObjectURL(bgUrl);
+      bgUrl = URL.createObjectURL(f); applyBg(); msg = '已換上背景圖'; paintPanel(); return;
+    }
     if (t.matches('[data-on]')) {
       const id = t.getAttribute('data-on');
       cfg.off = cfg.off.filter(x => x !== id);
@@ -2882,7 +2982,7 @@
       paintPanel();
       return;
     }
-    if (t.matches('input[type=file]')) {
+    if (t.matches('[data-avfile]')) {
       const files = [...t.files];
       let ok = 0, bad = [];
       for (const f of files) {
@@ -2899,7 +2999,7 @@
   let ready = false;
   let queued = false;
   const schedule = () => { if (!queued) { queued = true; setTimeout(() => { queued = false; try { apply(); } catch (e) {  } }, 30); } };
-  new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] });
+  new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['src'] });
   tk.onToggle(on => { if (on) schedule(); else clear(); });
   Promise.race([loadImported(), new Promise(r => setTimeout(r, 1500))]).then(() => { pick(); ready = true; schedule(); });
 })();

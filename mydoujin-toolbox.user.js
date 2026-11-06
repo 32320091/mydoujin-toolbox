@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         我的同人｜工具箱
 // @namespace    mydoujin-toolbox
-// @version      1.7.2
+// @version      1.7.3
 // @description  自動打樓層 Boss、戰報統計、戰報逐行播放、Boss 冷卻倒數、角色查詢、轉生頁整理（含首頁一鍵轉生）、首頁頭像（含自訂暱稱、名稱、稱號、背景圖）整合成一個插件；左下角圖示按鈕可個別開關各功能（立即生效）
 // @match        https://mydoujin.online/*
 // @run-at       document-start
@@ -12,15 +12,15 @@
 (function () {
   'use strict';
   if (window.__mdToolbox) return;
-  const TK_VER = "1.7.2";
+  const TK_VER = "1.7.3";
   window.__mdToolbox = TK_VER;
   const ICON = "data:image/webp;base64,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";
   const OFF_KEY = 'mdtk:off', ON_KEY = 'mdtk:on';
   const readList = k => { try { const v = JSON.parse(localStorage.getItem(k) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } };
   const writeList = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {  } };
   const MODS = [
-    Object.assign({"id": "autoboss", "icon": "👑", "name": "自動打樓層 Boss", "desc": "Boss 挑戰冷卻一到就自動開打（跟按「開始挑戰」一樣，有組隊時要是隊長）；可固定在同一層、勝利後留在本層、輸了就停。開著任何一個我的同人分頁就會在背景執行。預設關閉；展開這裡設定，Boss 頁與首頁（左側，可拖曳）也有同一張設定卡。", "off": true, "ver": "1.2.0", "at": "idle"}, { run: function (TK) {
-// ===== 自動打樓層 Boss 1.2.0（mydoujin_自動打王.user.js）=====
+    Object.assign({"id": "autoboss", "icon": "👑", "name": "自動打樓層 Boss", "desc": "Boss 挑戰冷卻一到就自動開打（跟按「開始挑戰」一樣，有組隊時要是隊長）；可固定在同一層、勝利後留在本層、輸了就停；開打前檢查隊員與助戰（助戰不見或沒滿 100 等就換備選，沒有就停）。開著任何一個我的同人分頁就會在背景執行。預設關閉；展開這裡設定，Boss 頁與首頁（左側，可拖曳）也有同一張設定卡。", "off": true, "ver": "1.3.0", "at": "idle"}, { run: function (TK) {
+// ===== 自動打樓層 Boss 1.3.0（mydoujin_自動打王.user.js）=====
 (function () {
   'use strict';
   const tk = (typeof TK === 'object' && TK) || (() => {
@@ -37,7 +37,9 @@
   const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {  } };
   const cfgOf = () => {
     const c = load(CFG_KEY, {}) || {};
-    return { stopLose: c.stopLose !== false, fixed: !!c.fixed, floor: c.floor === '' || c.floor == null ? '' : c.floor };
+    const backups = String(c.backups || '').split(/[,，、\n]+/).map(x => x.trim()).filter(Boolean);
+    return { stopLose: c.stopLose !== false, fixed: !!c.fixed, floor: c.floor === '' || c.floor == null ? '' : c.floor,
+      needAssist: c.needAssist !== false, members100: !!c.members100, backupsText: String(c.backups || ''), backups };
   };
   const floorIn = v => { if (v === '' || v == null) return 0; const n = parseInt(v, 10); if (!Number.isFinite(n)) return 0; return n <= 0 && n >= -9 ? n + 100 : (n > 0 ? n : 0); };
   const fLbl = n => (+n > 90 ? +n - 100 : +n) + 'F';
@@ -78,6 +80,24 @@
   }
   const dropLock = () => { const l = load(LOCK_KEY, null); if (l && l.tab === TAB) try { localStorage.removeItem(LOCK_KEY); } catch (e) {  } };
   function stop(why) { setState({ nextAt: 0, info: why }); addLog('⛔ ' + why + '，已關閉自動打王'); tk.set(false); }
+  const lvOk = ch => ch && +ch.level >= 100 && !ch.isDead;
+  const who = x => `${x.nickname || '?'}（${x.character ? x.character.name + ' Lv.' + x.character.level + (x.character.isDead ? '・倒下' : '') : '沒有角色'}）`;
+  async function useBackup(ps, cfg, skipUserId) {
+    for (const name of cfg.backups) {
+      let cands = [];
+      try { cands = (await api('/api/dungeon/party/assist/candidates?page=1&name=' + encodeURIComponent(name))).candidates || []; }
+      catch (e) { addLog(`⚠️ 找備選助戰「${name}」失敗（${e.message}）`); continue; }
+      const c = cands.find(x => String(x.nickname || '').trim() === name && x.userId !== skipUserId);
+      if (!c) { addLog(`🔎 備選助戰「${name}」現在借不到（不在可借名單裡）`); continue; }
+      if (!lvOk(c.character)) { addLog(`🔎 備選助戰 ${who(c)} 沒滿 100 等或倒下，跳過`); continue; }
+      const party = ps.party;
+      await api('/api/dungeon/party/assist', { method: 'POST', body: { partyId: party ? party.id : undefined, version: party ? party.version : undefined, characterId: c.characterId || (c.character && c.character._id) } });
+      const ps2 = await api('/api/dungeon/party');
+      if (ps2.assist && ps2.assist.userId === c.userId && lvOk(ps2.assist.character)) { addLog(`🔁 換上備選助戰 ${who(ps2.assist)}`); return ps2; }
+      addLog(`⚠️ 換備選助戰「${name}」後沒有生效`);
+    }
+    return null;
+  }
   let busy = false;
   async function turn() {
     if (!tk.on || busy || document.visibilityState === 'prerender') return;
@@ -94,9 +114,33 @@
       const cfg = cfgOf(), floor = floorIn(cfg.floor);
       if (!cfg.fixed && boss.cleared) return later(60, '所有樓層 Boss 都打完了');
       let ps = await api('/api/dungeon/party');
+      if ((ps.assist ? ps.assist.nickname : '') !== (state().assistName || '')) setState({ assistName: ps.assist ? ps.assist.nickname : '' });
       const cd = bossCdMin(ps.blockers);
       if (cd > 0) return later(cd + 0.1, '冷卻中');
       let party = ps.party;
+      const roster = party ? (party.members || []).map(m => m.userId).sort() : [];
+      const prev = state().roster;
+      if (prev && prev.length) {
+        const gone = prev.filter(id => !roster.includes(id));
+        if (!party) { stop('隊伍不見了（可能被解散或踢出）'); return; }
+        if (gone.length) { stop(`有 ${gone.length} 位隊員離開了隊伍`); return; }
+      }
+      setState({ roster, assistName: ps.assist ? ps.assist.nickname : '' });
+      if (party) {
+        const bad = (party.members || []).filter(m => !m.character || (cfg.members100 && +m.character.level < 100));
+        if (bad.length) { stop('隊員沒滿 100 等：' + bad.map(who).join('、')); return; }
+      }
+      if (cfg.needAssist && (!party || party.leaderId === ps.viewerId)) {
+        const a = ps.assist;
+        if (!a || !lvOk(a.character)) {
+          const why = !a ? '助戰不見了' : `助戰 ${who(a)} 沒滿 100 等或倒下`;
+          if (!cfg.backups.length) { stop(why + '，也沒有設定備選助戰'); return; }
+          addLog(`⚠️ ${why}，改用備選名單`);
+          const ps2 = await useBackup(ps, cfg, a && a.userId);
+          if (!ps2) { stop(why + '，備選名單裡也沒有能借的助戰'); return; }
+          ps = ps2; party = ps.party;
+        }
+      }
       const block = (ps.blockers || []).join('；') ||
         (party && party.leaderId !== ps.viewerId ? '不是隊長，不能開打' : '') ||
         (party && (party.members || []).some(m => m.character && m.character.isDead) ? '隊伍裡有人倒下' : '');
@@ -127,7 +171,7 @@
       const key = 'boss-challenge:' + ps.viewerId;
       save(key, body);
       const bname = boss.name || (boss.bosses && boss.bosses[0] && boss.bosses[0].name) || '?';
-      addLog(`👑 挑戰 ${boss.floorNumber != null ? fLbl(boss.floorNumber) : '?'}「${bname}」${hold ? '（留在本層）' : ''}`);
+      addLog(`👑 挑戰 ${boss.floorNumber != null ? fLbl(boss.floorNumber) : '?'}「${bname}」${hold ? '（留在本層）' : ''}｜隊員：${party ? (party.members || []).map(who).join('、') : '單人'}｜助戰：${ps.assist ? who(ps.assist) : '無'}`);
       let r;
       try { r = await api('/api/dungeon/challenge', { method: 'POST', body }); try { localStorage.removeItem(key); } catch (e) {  } }
       catch (e) { if (e.status) { try { localStorage.removeItem(key); } catch (e2) {  } } throw e; }
@@ -161,6 +205,7 @@
     const left = sec >= 60 ? `${Math.floor(sec / 60)} 分 ${String(sec % 60).padStart(2, '0')} 秒` : `${sec} 秒`;
     return (s.info === '冷卻中' ? '冷卻中，' : s.info ? s.info + '・' : '') + left + (s.info === '冷卻中' ? '後開打' : '後再看');
   }
+  const curAssist = () => state().assistName || '';
   function otherBot() {
     try { const v = JSON.parse(localStorage.getItem('mdp_settings_v1') || '{}'); return !!(v && v.boss && v.boss.on); } catch (e) { return false; }
   }
@@ -175,6 +220,11 @@
       <label><input type="checkbox" data-k="stopLose" ${c.stopLose ? 'checked' : ''}> 輸了就停止自動打王</label>
       <label><input type="checkbox" data-k="fixed" ${c.fixed ? 'checked' : ''}> 固定在 <input class="fl" data-k="floor" type="number" min="-9" max="200" placeholder="層" value="${esc(c.floor)}"> F 挑戰</label>
       <div class="mu">固定樓層：打贏留在本層，不在這層時開打前先切過來（切樓層跟行動共用冷卻）。91 層以上照網站寫 -9～0。沒固定時照 Boss 頁「勝利後留在本層」的勾選。</div>
+      <label><input type="checkbox" data-k="needAssist" ${c.needAssist ? 'checked' : ''}> 要帶助戰：助戰不見了或沒滿 100 等就換備選，沒有備選就停止</label>
+      <label class="col">備選助戰（暱稱，照順序；逗號或換行分隔）<textarea data-k="backups" rows="2" placeholder="例：底線, 好耶">${esc(c.backupsText)}</textarea></label>
+      ${(() => { const a = curAssist(); return a ? `<button type="button" class="mini" data-addassist="${esc(a)}">＋ 把目前的助戰「${esc(a)}」加入備選</button>` : ''; })()}
+      <label><input type="checkbox" data-k="members100" ${c.members100 ? 'checked' : ''}> 隊員沒滿 100 等也停止</label>
+      <div class="mu">每次開打前都會檢查：隊伍不見了、有隊員離開 → 停止；隊員倒下 → 等 10 分鐘再看。</div>
       <div class="lg">${L.length ? L.slice(0, 8).map(x => `<div><span class="mu">${hhmm(x.t)}</span> ${esc(x.m)}</div>`).join('') : '<span class="mu">還沒有紀錄</span>'}</div>
     </div>`;
     if (!el.__mdab) {
@@ -185,9 +235,20 @@
         if (!k) return;
         const cur = load(CFG_KEY, {}) || {};
         if (k === 'floor') { const v = parseInt(e.target.value, 10); cur.floor = Number.isFinite(v) ? v : ''; }
+        else if (k === 'backups') cur.backups = e.target.value;
         else cur[k] = e.target.checked;
         save(CFG_KEY, cur);
         setState({ nextAt: 0, info: '' });
+      });
+      el.addEventListener('click', e => {
+        const b = e.target.closest && e.target.closest('[data-addassist]');
+        if (!b) return;
+        const name = b.getAttribute('data-addassist');
+        const cur = load(CFG_KEY, {}) || {};
+        const list = String(cur.backups || '').split(/[,，、\n]+/).map(x => x.trim()).filter(Boolean);
+        if (!list.includes(name)) list.push(name);
+        cur.backups = list.join(', ');
+        save(CFG_KEY, cur); paintAll();
       });
     }
   }
@@ -198,6 +259,9 @@
     .mdab .fl { width: 64px; background: #10141d; color: #e2e8f0; border: 1px solid #4a5568; border-radius: 6px; padding: 2px 6px; }
     .mdab .mu { color: #a0aec0; font-size: 12px; }
     .mdab .warn { color: #f6ad55; }
+    .mdab label.col { flex-direction: column; align-items: stretch; gap: 2px; }
+    .mdab textarea { background: #10141d; color: #e2e8f0; border: 1px solid #4a5568; border-radius: 6px; padding: 4px 6px; font: inherit; resize: vertical; }
+    .mdab .mini { align-self: flex-start; background: #2d3748; color: #e2e8f0; border: 1px solid #4a5568; border-radius: 6px; padding: 2px 8px; font-size: 12px; cursor: pointer; }
     .mdab .lg { border-top: 1px solid #2d3748; padding-top: 4px; max-height: 150px; overflow: auto; }
     .mdab-page { margin: 0 0 24px; padding: 12px; background: #171923; border: 1px solid #2c7a7b; }
     .mdab-page .ttl { font-weight: 700; color: #81e6d9; margin-bottom: 4px; }
@@ -298,7 +362,7 @@
     [b, toolboxEl && toolboxEl.isConnected ? toolboxEl : null].forEach(el => {
       if (!el) return;
       const ae = (el.getRootNode && el.getRootNode().activeElement) || document.activeElement;
-      if (ae && el.contains(ae) && ae.matches('input[type=number]')) { const s = el.querySelector('[data-st]'); if (s) s.textContent = statusText(); return; }
+      if (ae && el.contains(ae) && ae.matches('input[type=number], textarea')) { const s = el.querySelector('[data-st]'); if (s) s.textContent = statusText(); return; }
       renderSettings(el);
     });
   }
@@ -308,7 +372,7 @@
   setInterval(() => { const s = document.querySelectorAll('.mdab [data-st]'); s.forEach(x => { const t = statusText(); if (x.textContent !== t) x.textContent = t; }); }, 1000);
   (function loop() { turn().catch(() => {}); setTimeout(loop, TICK_MS); })();
   tk.onToggle(on => {
-    if (on) { setState({ nextAt: 0, info: '' }); addLog('▶ 開啟自動打王'); pageCard(); setTimeout(() => turn().catch(() => {}), 500); }
+    if (on) { setState({ nextAt: 0, info: '', roster: null }); addLog('▶ 開啟自動打王（以現在的隊員為準）'); pageCard(); setTimeout(() => turn().catch(() => {}), 500); }
     else { pageCard(); paintAll(); }
   });
   pageCard();
